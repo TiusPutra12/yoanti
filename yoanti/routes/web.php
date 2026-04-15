@@ -211,7 +211,7 @@ Route::get('/login', function () {
         $users[] = [
             'name' => 'Administrator',
             'username' => 'admin',
-            'password' => Hash::make('admin15042026'),
+            'password' => Hash::make('admin'),
             'role' => 'admin'
         ];
         $updatedUsers = true;
