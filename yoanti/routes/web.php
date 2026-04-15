@@ -260,11 +260,26 @@ Route::get('/register', function () {
     return view('register');
 });
 
+Route::get('/terms', function () {
+    return view('terms');
+});
+
+Route::get('/privacy', function () {
+    return view('privacy');
+});
+
 Route::post('/register', function (Request $request) {
     $request->validate([
+        'role' => 'required|in:job_provider,job_seeker',
         'name' => 'required',
         'username' => 'required',
         'password' => 'required|min:4',
+        'profession' => 'required|string',
+        'skills' => 'required|string',
+        'workplace' => 'nullable|string',
+        'payment_method' => 'required|string',
+        'payment_account' => 'required|string',
+        'terms' => 'accepted' // This ensures the checkbox is checked
     ]);
 
     $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
@@ -274,7 +289,7 @@ Route::post('/register', function (Request $request) {
     // Check if username exists
     foreach ($users as $u) {
         if ($u['username'] === $request->username) {
-            return back()->with('error', 'Username sudah digunakan, silakan pilih yang lain.');
+            return back()->with('error', 'Username sudah digunakan, silakan pilih yang lain.')->withInput();
         }
     }
 
@@ -282,7 +297,12 @@ Route::post('/register', function (Request $request) {
         'name' => $request->name,
         'username' => $request->username,
         'password' => Hash::make($request->password),
-        'role' => 'user' // Default to user
+        'role' => $request->role,
+        'profession' => $request->profession,
+        'skills' => $request->skills,
+        'workplace' => $request->workplace,
+        'payment_method' => $request->payment_method,
+        'payment_account' => $request->payment_account
     ];
 
     Storage::put('users.json', json_encode($users, JSON_PRETTY_PRINT));
