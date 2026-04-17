@@ -336,18 +336,61 @@
         }
 
         @media (max-width: 480px) {
-            .auth-page { padding: 1rem 0.75rem; }
-            .auth-card { padding: 1.25rem; border-radius: 16px; }
-            .step-indicator { margin-bottom: 1.5rem; }
-            .step-dot { width: 28px; height: 28px; font-size: 0.75rem; }
-            .step-label { font-size: 0.65rem; }
-            .step-title { font-size: 1.1rem; }
-            .step-desc { font-size: 0.8rem; margin-bottom: 1.25rem; }
-            .role-icon { font-size: 1.5rem; }
-            .role-name { font-size: 0.8rem; }
-            .form-control { min-height: 44px; font-size: 16px; padding: 0.6rem 0.9rem; }
-            .btn-next, .btn-back { min-height: 44px; font-size: 0.9rem; }
-            .role-card { padding: 0.85rem; }
+            .auth-page {
+                padding: 1rem 0.75rem;
+            }
+
+            .auth-card {
+                padding: 1.25rem;
+                border-radius: 16px;
+            }
+
+            .step-indicator {
+                margin-bottom: 1.5rem;
+            }
+
+            .step-dot {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+
+            .step-label {
+                font-size: 0.65rem;
+            }
+
+            .step-title {
+                font-size: 1.1rem;
+            }
+
+            .step-desc {
+                font-size: 0.8rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .role-icon {
+                font-size: 1.5rem;
+            }
+
+            .role-name {
+                font-size: 0.8rem;
+            }
+
+            .form-control {
+                min-height: 44px;
+                font-size: 16px;
+                padding: 0.6rem 0.9rem;
+            }
+
+            .btn-next,
+            .btn-back {
+                min-height: 44px;
+                font-size: 0.9rem;
+            }
+
+            .role-card {
+                padding: 0.85rem;
+            }
         }
 
         /* Validation Styles */
@@ -366,19 +409,43 @@
         }
 
         .shake {
-            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
         }
 
         @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
-            40%, 60% { transform: translate3d(3px, 0, 0); }
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-3px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(3px, 0, 0);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 @endpush
@@ -433,14 +500,12 @@
 
                         <div class="role-cards">
                             <div class="role-card selected" onclick="selectRole('job_seeker', this)">
-                                <div class="role-icon">👤</div>
                                 <div class="role-name">Pencari Jasa</div>
                                 <div class="role-desc">Saya butuh layanan digital</div>
                             </div>
-                            <div class="role-card" onclick="selectRole('job_provider', this)">
-                                <div class="role-icon">🏢</div>
-                                <div class="role-name">Penyedia Jasa</div>
-                                <div class="role-desc">Saya menawarkan layanan</div>
+                            <div class="role-card" {{-- onclick="selectRole('job_provider', this)" --}}>
+                                <div class="role-name">Fitur akan datang</div>
+                                <div class="role-desc">Masih dalam pengembangan</div>
                             </div>
                         </div>
                         <input type="hidden" name="role" id="roleTypeInput" value="job_seeker">
@@ -577,7 +642,7 @@
                     showError(usernameInput, 'error-username');
                     hasError = true;
                 }
-                
+
                 if (passwordInput.value.length < 6) {
                     showError(passwordInput, 'error-password');
                     hasError = true;
@@ -585,36 +650,36 @@
 
                 if (hasError) return;
             }
-            
+
             if (step === 2) {
                 const nameInput = document.getElementById('reg-name');
                 const professionInput = document.getElementById('reg-profession');
                 const skillsInput = document.getElementById('reg-skills');
                 const paymentMethodInput = document.getElementById('reg-payment-method');
                 const paymentAccountInput = document.getElementById('reg-payment-account');
-                
+
                 let hasError = false;
 
                 if (!nameInput.value.trim()) {
                     showError(nameInput, 'error-name');
                     hasError = true;
                 }
-                
+
                 if (!professionInput.value.trim()) {
                     showError(professionInput, 'error-profession');
                     hasError = true;
                 }
-                
+
                 if (!skillsInput.value.trim()) {
                     showError(skillsInput, 'error-skills');
                     hasError = true;
                 }
-                
+
                 if (!paymentMethodInput.value) {
                     showError(paymentMethodInput, 'error-payment-method');
                     hasError = true;
                 }
-                
+
                 if (!paymentAccountInput.value.trim()) {
                     showError(paymentAccountInput, 'error-payment-account');
                     hasError = true;
@@ -630,7 +695,7 @@
             input.classList.add('is-invalid', 'shake');
             const errorEl = document.getElementById(errorId);
             if (errorEl) errorEl.style.display = 'block';
-            
+
             // Remove shake after animation
             setTimeout(() => input.classList.remove('shake'), 400);
         }
