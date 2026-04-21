@@ -225,11 +225,11 @@
                 <div class="form-grid" style="gap: 1rem; margin-bottom: 1rem;">
                     <div class="form-group">
                         <label>Nama Lengkap <span class="required">*</span></label>
-                        <input type="text" id="name" class="form-control" placeholder="Budi Santoso" required>
+                        <input type="text" id="name" class="form-control" placeholder="Budi Santoso" value="{{ session('user')['name'] ?? '' }}" required {{ session()->has('user') ? 'readonly' : '' }}>
                     </div>
                     <div class="form-group">
                         <label>Instansi / Perusahaan <span class="required">*</span></label>
-                        <input type="text" id="company" class="form-control" placeholder="Nama instansi Anda" required>
+                        <input type="text" id="company" class="form-control" placeholder="Nama instansi Anda" value="{{ session('user')['workplace'] ?? '' }}" required {{ session()->has('user') && isset(session('user')['workplace']) && session('user')['workplace'] !== '' ? 'readonly' : '' }}>
                     </div>
                 </div>
 

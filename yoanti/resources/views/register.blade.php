@@ -503,6 +503,8 @@
                                 <div class="role-name">Pencari Jasa</div>
                                 <div class="role-desc">Saya butuh layanan digital</div>
                             </div>
+
+                            {{-- Tombol Untuk Pegawai --}}
                             <div class="role-card" {{-- onclick="selectRole('job_provider', this)" --}}>
                                 <div class="role-name">Fitur akan datang</div>
                                 <div class="role-desc">Masih dalam pengembangan</div>
@@ -570,12 +572,6 @@
                                 <option value="GoPay">GoPay</option>
                             </select>
                             <div id="error-payment-method" class="error-message">Pilih metode pembayaran</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Nomor Rekening / ID E-Wallet</label>
-                            <input type="text" name="payment_account" id="reg-payment-account" class="form-control"
-                                placeholder="Contoh: 1234567890" required value="{{ old('payment_account') }}">
-                            <div id="error-payment-account" class="error-message">Nomor rekening/ID wajib diisi</div>
                         </div>
 
                         <div class="step-buttons">
@@ -656,7 +652,6 @@
                 const professionInput = document.getElementById('reg-profession');
                 const skillsInput = document.getElementById('reg-skills');
                 const paymentMethodInput = document.getElementById('reg-payment-method');
-                const paymentAccountInput = document.getElementById('reg-payment-account');
 
                 let hasError = false;
 
@@ -677,11 +672,6 @@
 
                 if (!paymentMethodInput.value) {
                     showError(paymentMethodInput, 'error-payment-method');
-                    hasError = true;
-                }
-
-                if (!paymentAccountInput.value.trim()) {
-                    showError(paymentAccountInput, 'error-payment-account');
                     hasError = true;
                 }
 

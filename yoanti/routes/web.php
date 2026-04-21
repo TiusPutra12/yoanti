@@ -7,7 +7,13 @@ use Illuminate\Support\Facades\Storage;
 
 // Halaman Utama
 Route::get('/', function () {
-    return view('welcome');
+    $orders = json_decode(Storage::exists('orders.json') ? Storage::get('orders.json') : '[]', true) ?: [];
+    $completedProjects = count(array_filter($orders, fn($o) => isset($o['status']) && strtolower($o['status']) === 'selesai'));
+    
+    $comments = json_decode(Storage::exists('comments.json') ? Storage::get('comments.json') : '[]', true) ?: [];
+    $totalTestimonials = is_array($comments) ? count($comments) : 0;
+
+    return view('welcome', compact('completedProjects', 'totalTestimonials'));
 });
 
 // Halaman Komentar
@@ -278,7 +284,6 @@ Route::post('/register', function (Request $request) {
         'skills' => 'required|string',
         'workplace' => 'nullable|string',
         'payment_method' => 'required|string',
-        'payment_account' => 'required|string',
         'terms' => 'accepted' // This ensures the checkbox is checked
     ]);
 
@@ -301,8 +306,7 @@ Route::post('/register', function (Request $request) {
         'profession' => $request->profession,
         'skills' => $request->skills,
         'workplace' => $request->workplace,
-        'payment_method' => $request->payment_method,
-        'payment_account' => $request->payment_account
+        'payment_method' => $request->payment_method
     ];
 
     Storage::put('users.json', json_encode($users, JSON_PRETTY_PRINT));
