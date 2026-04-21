@@ -20,7 +20,7 @@
             position: absolute;
             width: clamp(200px, 40vw, 500px);
             height: clamp(200px, 40vw, 500px);
-            background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
             top: -100px;
             right: -100px;
             border-radius: 50%;
@@ -32,7 +32,7 @@
             position: absolute;
             width: clamp(150px, 30vw, 350px);
             height: clamp(150px, 30vw, 350px);
-            background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
             bottom: -50px;
             left: -50px;
             border-radius: 50%;
@@ -43,9 +43,9 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(37,99,235,0.1);
+            background: rgba(37, 99, 235, 0.1);
             color: var(--primary);
-            border: 1px solid rgba(37,99,235,0.2);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             padding: 0.4rem 1rem;
             border-radius: 999px;
             font-size: 0.8rem;
@@ -226,7 +226,9 @@
             border-color: rgba(37, 99, 235, 0.3);
         }
 
-        .service-card:hover::before { opacity: 1; }
+        .service-card:hover::before {
+            opacity: 1;
+        }
 
         .icon-wrapper {
             width: 56px;
@@ -270,7 +272,9 @@
             text-align: center;
         }
 
-        .stat-item { padding: 0.5rem; }
+        .stat-item {
+            padding: 0.5rem;
+        }
 
         .stat-number {
             font-size: clamp(1.75rem, 5vw, 2.5rem);
@@ -283,26 +287,35 @@
 
         .stat-label {
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         @media (max-width: 480px) {
-            .hero-trust { gap: 1rem; }
-            .btn-cta, .btn-outline { width: 100%; justify-content: center; }
-            .hero-cta { flex-direction: column; align-items: stretch; width: 100%; max-width: 320px; }
+            .hero-trust {
+                gap: 1rem;
+            }
+
+            .btn-cta,
+            .btn-outline {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                max-width: 320px;
+            }
         }
     </style>
 @endpush
 
 @section('content')
     <section class="hero">
-        <div class="hero-badge">
-            <span class="trust-dot"></span>
-            Solusi Digital Terpercaya
-        </div>
         <h1>Wujudkan <span>Website & Aplikasi Impian</span> Anda</h1>
         <p>Pengembangan perangkat lunak profesional dengan desain modern dan performa tinggi untuk bisnis Anda.</p>
 
@@ -317,15 +330,24 @@
 
         <div class="hero-trust">
             <span class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Harga Transparan
             </span>
             <span class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Dukungan 24/7
             </span>
             <span class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Pengiriman Tepat Waktu
             </span>
         </div>
@@ -356,24 +378,25 @@
         <div class="section-header">
             <span class="section-badge">Layanan Kami</span>
             <h2 class="section-title">Solusi Digital Lengkap</h2>
-            <p class="section-subtitle">Dari ideasi hingga peluncuran, kami hadir untuk setiap tahap perjalanan digital Anda.</p>
+            <p class="section-subtitle">Dari ideasi hingga peluncuran, kami hadir untuk setiap tahap perjalanan digital
+                Anda.</p>
         </div>
 
         <div class="services-grid">
             <div class="service-card">
-                <div class="icon-wrapper">💻</div>
-                <h3>Pembuatan Website</h3>
-                <p>Dari landing page hingga e-commerce kompleks — responsif, cepat, dan SEO-ready.</p>
+                <h3 style="text-align: center">Pembuatan Website</h3>
+                <p style="text-align: center">Dari landing page hingga e-commerce kompleks — responsif, cepat, dan
+                    SEO-ready.</p>
             </div>
             <div class="service-card">
-                <div class="icon-wrapper">📱</div>
-                <h3>Aplikasi Android</h3>
-                <p>Aplikasi mobile interaktif dan user-friendly untuk memperluas jangkauan bisnis Anda.</p>
+                <h3 style="text-align: center">Aplikasi Android</h3>
+                <p style="text-align: center">Aplikasi mobile interaktif dan user-friendly untuk memperluas jangkauan bisnis
+                    Anda.</p>
             </div>
             <div class="service-card">
-                <div class="icon-wrapper">✨</div>
-                <h3>UI/UX Professional</h3>
-                <p>Desain visual yang indah sekaligus intuitif untuk pengalaman pengguna yang luar biasa.</p>
+                <h3 style="text-align: center">UI/UX Professional</h3>
+                <p style="text-align: center">Desain visual yang indah sekaligus intuitif untuk pengalaman pengguna yang
+                    luar biasa.</p>
             </div>
         </div>
     </section>

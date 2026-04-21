@@ -282,7 +282,7 @@
                                 <tr>
                                     <td data-label="Penulis">
                                         <strong>{{ $c['name'] }}</strong>
-                                        <small style="color: #64748B; display: block;">@{{ $c['username'] }}</small>
+                                        <small style="color: #64748B; display: block;">{{ '@' . $c['username'] }}</small>
                                         <small style="color: #94A3B8;">{{ $c['created_at'] }}</small>
                                     </td>
                                     <td data-label="Komentar" style="max-width: 280px; line-height: 1.5;">{{ $c['comment'] }}
@@ -317,7 +317,7 @@
                                                     <div>
                                                         <strong>{{ $reply['name'] }}</strong>
                                                         <small
-                                                            style="color: #64748B; display: block;">@{{ $reply['username'] }}</small>
+                                                            style="color: #64748B; display: block;">{{ '@' . $reply['username'] }}</small>
                                                         <small style="color: #94A3B8;">{{ $reply['created_at'] }}</small>
                                                     </div>
                                                 </div>

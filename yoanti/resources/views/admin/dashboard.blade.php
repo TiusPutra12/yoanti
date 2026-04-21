@@ -255,7 +255,7 @@
                                     </td>
                                     <td data-label="Klien">
                                         <div class="client-name">{{ $order['name'] }}</div>
-                                        <div class="client-meta">@{{ $order['user_username'] }}</div>
+                                        <div class="client-meta">{{ '@' . $order['user_username'] }}</div>
                                         <div class="client-meta">{{ $order['company'] }}</div>
                                     </td>
                                     <td data-label="Layanan">

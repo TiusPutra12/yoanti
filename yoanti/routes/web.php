@@ -252,6 +252,11 @@ Route::post('/login', function (Request $request) {
             if ($user['username'] === $request->username && Hash::check($request->password, $user['password'])) {
                 if(!isset($user['role'])) $user['role'] = 'user'; // fallback for existing
                 session(['user' => $user]);
+                
+                if ($user['role'] === 'superadmin') {
+                    return redirect('/superadmin/dashboard')->with('success', 'Selamat datang, ' . $user['name'] . '!');
+                }
+
                 return redirect('/')->with('success', 'Selamat datang, ' . $user['name'] . '!');
             }
         }

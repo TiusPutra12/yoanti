@@ -296,7 +296,7 @@
                                     </td>
                                     <td data-label="Klien">
                                         <strong>{{ $order['name'] }}</strong>
-                                        <small style="color: #64748B; display: block;">@{{ $order['user_username'] }}</small>
+                                        <small style="color: #64748B; display: block;">{{ '@' . $order['user_username'] }}</small>
                                     </td>
                                     <td data-label="Layanan" style="font-weight: 500;">{{ $order['programType'] }}</td>
                                     <td data-label="Status">
