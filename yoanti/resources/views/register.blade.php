@@ -504,10 +504,10 @@
                                 <div class="role-desc">Saya butuh layanan digital</div>
                             </div>
 
-                            {{-- Tombol Untuk Pegawai --}}
-                            <div class="role-card" {{-- onclick="selectRole('job_provider', this)" --}}>
-                                <div class="role-name">Fitur akan datang</div>
-                                <div class="role-desc">Masih dalam pengembangan</div>
+                            {{-- Tombol Untuk Pegawai (Penyedia Jasa) --}}
+                            <div class="role-card" onclick="selectRole('job_provider', this)">
+                                <div class="role-name">Penyedia Jasa</div>
+                                <div class="role-desc">Saya menyediakan layanan</div>
                             </div>
                         </div>
                         <input type="hidden" name="role" id="roleTypeInput" value="job_seeker">

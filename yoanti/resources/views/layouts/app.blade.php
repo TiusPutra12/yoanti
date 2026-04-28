@@ -277,6 +277,95 @@
             background-color: #FEF2F2;
         }
 
+        /* ── NOTIFICATIONS ── */
+        .notification-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #DC2626;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #F1F5F9;
+        }
+
+        .notif-content {
+            width: 320px;
+            right: 0;
+        }
+
+        .notif-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+            transition: background 0.15s;
+        }
+
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+
+        .notif-item:hover {
+            background: #F8FAFC;
+        }
+
+        .notif-item.unread {
+            background: rgba(37, 99, 235, 0.04);
+        }
+
+        .notif-item.unread:hover {
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .notif-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .notif-text h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.15rem;
+        }
+
+        .notif-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .notif-text small {
+            font-size: 0.7rem;
+            color: #94A3B8;
+        }
+
         /* ── TOAST NOTIFICATIONS ── */
         .toast-container {
             position: fixed;
@@ -413,19 +502,43 @@
         }
 
         .shake {
-            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
         }
 
         @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
-            40%, 60% { transform: translate3d(3px, 0, 0); }
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-3px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(3px, 0, 0);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ── MOBILE RESPONSIVE ── */
@@ -465,14 +578,16 @@
 
             .nav-links {
                 flex-direction: column;
-                gap: 0.35rem; /* Reduced gap */
+                gap: 0.35rem;
+                /* Reduced gap */
                 text-align: center;
                 width: 100%;
                 padding: 0 1.25rem;
             }
 
             .nav-link {
-                font-size: 1rem; /* Slightly smaller font for mobile info density */
+                font-size: 1rem;
+                /* Slightly smaller font for mobile info density */
                 padding: 0.75rem 1.25rem;
                 width: 100%;
                 display: block;
@@ -570,10 +685,20 @@
                         class="nav-link {{ request()->is('superadmin/komentar') ? 'active' : '' }}"
                         style="color: #BE185D;">Komentar</a>
                 @else
-                    <a href="{{ url('/') }}"
-                        class="nav-link {{ request()->is('/') ? 'active' : '' }}">Dashboard</a>
+                    @if (session()->has('user') && isset(session('user')['role']) && session('user')['role'] === 'job_provider')
+                        <a href="{{ url('/penyedia/dashboard') }}"
+                            class="nav-link {{ request()->is('penyedia/dashboard') ? 'active' : '' }}">Dashboard</a>
+                        <a href="{{ url('/penyedia/pesanan') }}"
+                            class="nav-link {{ request()->is('penyedia/pesanan') ? 'active' : '' }}">Pesanan Masuk</a>
+                    @else
+                        <a href="{{ url('/') }}"
+                            class="nav-link {{ request()->is('/') ? 'active' : '' }}">Dashboard</a>
+                        <a href="{{ url('/produk') }}"
+                            class="nav-link {{ request()->is('produk') ? 'active' : '' }}">Produk</a>
+                    @endif
+
                     <a href="{{ url('/komentar') }}"
-                        class="nav-link {{ request()->is('komentar') ? 'active' : '' }}">Komentar</a>
+                        class="nav-link {{ request()->is('komentar') ? 'active' : '' }}">Testimoni</a>
                 @endif
 
                 @if (session()->has('user') && isset(session('user')['role']) && session('user')['role'] === 'admin')
@@ -583,8 +708,101 @@
                 @endif
             </div>
 
+            @if (session()->has('user'))
+                @php
+                    $notifsContent = \Illuminate\Support\Facades\Storage::exists('notifications.json')
+                        ? \Illuminate\Support\Facades\Storage::get('notifications.json')
+                        : '[]';
+                    $allNotifs = json_decode($notifsContent, true) ?: [];
+                    $myNotifs = array_filter($allNotifs, function ($n) {
+                        return $n['username'] === session('user')['username'];
+                    });
+                    $myNotifs = array_reverse($myNotifs); // terbaru di atas
+                    $unreadCount = count(
+                        array_filter($myNotifs, function ($n) {
+                            return !$n['is_read'];
+                        }),
+                    );
+                    $topNotifs = array_slice($myNotifs, 0, 5); // tampilkan 5 teratas
+                @endphp
+                <div class="notification-dropdown">
+                    <button type="button" onclick="toggleNotifDropdown(event)" class="user-menu-btn"
+                        style="position: relative; margin-right: 0.5rem;" title="Notifikasi">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        @if ($unreadCount > 0)
+                            <span class="notif-badge"
+                                id="notifBadge">{{ $unreadCount > 9 ? '9+' : $unreadCount }}</span>
+                        @endif
+                    </button>
+                    <div id="notifMenuDropdown" class="dropdown-content notif-content">
+                        <div class="dropdown-header"
+                            style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong>Notifikasi</strong>
+                            @if ($unreadCount > 0)
+                                <button type="button" onclick="markAllRead(event)"
+                                    style="background: none; border: none; color: var(--primary); font-size: 0.75rem; font-weight: 600; cursor: pointer;">Tandai
+                                    sudah dibaca</button>
+                            @endif
+                        </div>
+                        <div class="notif-list">
+                            @if (count($topNotifs) > 0)
+                                @foreach ($topNotifs as $n)
+                                    <div class="notif-item {{ $n['is_read'] ? '' : 'unread' }}">
+                                        <div class="notif-icon">
+                                            @if ($n['type'] === 'order')
+                                                <svg width="16" height="16" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="9" cy="21" r="1"></circle>
+                                                    <circle cx="20" cy="21" r="1"></circle>
+                                                    <path
+                                                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
+                                                    </path>
+                                                </svg>
+                                            @elseif($n['type'] === 'comment')
+                                                <svg width="16" height="16" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path
+                                                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                                                    </path>
+                                                </svg>
+                                            @else
+                                                <svg width="16" height="16" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <line x1="12" y1="16" x2="12"
+                                                        y2="12"></line>
+                                                    <line x1="12" y1="8" x2="12.01"
+                                                        y2="8"></line>
+                                                </svg>
+                                            @endif
+                                        </div>
+                                        <div class="notif-text">
+                                            <h4>{{ $n['title'] }}</h4>
+                                            <p>{{ $n['message'] }}</p>
+                                            <small>{{ explode(',', $n['created_at'])[0] ?? '' }}</small>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div
+                                    style="padding: 1.5rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                                    Belum ada notifikasi</div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <div class="user-dropdown">
-                <button type="button" onclick="toggleUserDropdown(event)" class="user-menu-btn" title="Menu Pengguna">
+                <button type="button" onclick="toggleUserDropdown(event)" class="user-menu-btn"
+                    title="Menu Pengguna">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -611,6 +829,17 @@
                                 Pesanan Saya
                             </a>
                         @endif
+                        <a href="{{ url('/pengaturan-akun') }}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                </path>
+                            </svg>
+                            Pengaturan Akun
+                        </a>
                         <a href="{{ url('/logout') }}" class="logout">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -708,7 +937,36 @@
         function toggleUserDropdown(e) {
             if (e) e.stopPropagation();
             const dropdown = document.getElementById("userMenuDropdown");
+            const notifDropdown = document.getElementById("notifMenuDropdown");
+            if (notifDropdown) notifDropdown.classList.remove("show");
             if (dropdown) dropdown.classList.toggle("show");
+        }
+
+        function toggleNotifDropdown(e) {
+            if (e) e.stopPropagation();
+            const notifDropdown = document.getElementById("notifMenuDropdown");
+            const userDropdown = document.getElementById("userMenuDropdown");
+            if (userDropdown) userDropdown.classList.remove("show");
+            if (notifDropdown) notifDropdown.classList.toggle("show");
+        }
+
+        function markAllRead(e) {
+            if (e) e.stopPropagation();
+            fetch("{{ url('/notifikasi/read') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }).then(r => r.json()).then(data => {
+                if (data.success) {
+                    const badge = document.getElementById('notifBadge');
+                    if (badge) badge.style.display = 'none';
+                    document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+                    const btn = e.target;
+                    if (btn) btn.style.display = 'none';
+                }
+            });
         }
 
         function toggleMobileNav() {
@@ -730,8 +988,8 @@
 
         // Handle click di luar menu/dropdown
         window.addEventListener('click', function(event) {
-            // Dropdown Menu Profil
-            if (!event.target.closest('.user-dropdown')) {
+            // Dropdown Menu Profil & Notif
+            if (!event.target.closest('.user-dropdown') && !event.target.closest('.notification-dropdown')) {
                 document.querySelectorAll(".dropdown-content.show").forEach(el => el.classList.remove('show'));
             }
             // Mobile Navigation Toggle
