@@ -994,7 +994,7 @@
                             <div class="product-card">
                                 <div class="product-img-box">
                                     <span class="badge-type">{{ $product['type'] ?? 'Layanan' }}</span>
-                                    <img src="{{ $product['image'] }}" alt="{{ $product['title'] }}" class="product-img"
+                                    <img src="{{ asset($product['image']) }}" alt="{{ $product['title'] }}" class="product-img"
                                         onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=500&q=80'">
                                 </div>
                                 <div class="product-body">
