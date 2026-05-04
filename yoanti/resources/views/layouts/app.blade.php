@@ -790,7 +790,7 @@
 
             .mobile-nav-cover {
                 width: 100%;
-                height: 140px;
+                height: 130px;
                 background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
                 position: relative;
                 overflow: hidden;
@@ -816,7 +816,7 @@
                 position: relative;
                 display: flex;
                 justify-content: center;
-                margin-top: -45px;
+                margin-top: -105px;
                 z-index: 2;
             }
 
@@ -841,7 +841,7 @@
 
             .mobile-nav-info {
                 text-align: center;
-                padding: 1rem 1.5rem 1.5rem;
+                padding: 0.75rem 1.5rem 1.25rem;
                 background: #111827;
             }
 
@@ -1164,7 +1164,7 @@
                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                                 <polyline points="9 22 9 12 15 12 15 22" />
                             </svg>
-                            Dashboard
+                            Beranda
                         </a>
                         <a href="{{ url('/produk') }}"
                             class="nav-link {{ request()->is('produk') ? 'active' : '' }}">
@@ -1289,6 +1289,18 @@
                         <span class="notif-badge" id="notifBadge">{{ $unreadCount > 9 ? '9+' : $unreadCount }}</span>
                     @endif
                 </button>
+            @else
+                <div class="guest-nav-actions"
+                    style="display: flex; align-items: center; gap: 0.75rem; margin-right: 0.5rem;">
+                    <a href="{{ url('/login') }}" class="btn-guest-login"
+                        style="font-weight: 700; font-size: 0.875rem; color: var(--text-main); padding: 0.5rem 1rem; text-decoration: none; border-radius: 10px; transition: var(--transition);">
+                        Masuk
+                    </a>
+                    <a href="{{ url('/register') }}" class="btn-primary"
+                        style="padding: 0.55rem 1.25rem; font-size: 0.875rem; border-radius: 10px;">
+                        Mulai Sekarang
+                    </a>
+                </div>
             @endif
 
             <div class="user-dropdown">
