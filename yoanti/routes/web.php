@@ -201,7 +201,7 @@ Route::get('/pesanan-saya', function () {
     if (!is_array($orders)) $orders = [];
     
     $myOrders = array_filter($orders, function($o) {
-        return $o['user_username'] === session('user')['username'];
+        return isset($o['user_username']) && $o['user_username'] === session('user')['username'];
     });
     
     $myOrders = array_reverse($myOrders);
