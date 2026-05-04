@@ -328,8 +328,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="phone_number">Nomor WhatsApp (Contoh: 6281234567890)</label>
-                    <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ session('user')['phone_number'] ?? '' }}" placeholder="Gunakan format 62 tanpa + atau 0 di depan">
+                    <label class="form-label" for="phone_number">Nomor WhatsApp (Maksimal 13 angka)</label>
+                    <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ session('user')['phone_number'] ?? '' }}" placeholder="Contoh: 6281234567890" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
             </div>
             @endif
@@ -342,9 +342,9 @@
                     <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Biarkan kosong jika tidak ingin mengubah password">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="current_password">Konfirmasi Password Saat Ini (Diperlukan hanya jika ganti password)</label>
-                    <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Hanya diisi jika ingin mengubah password">
+                <div class="form-group" id="current_password_group" style="display: none;">
+                    <label class="form-label" for="current_password">Konfirmasi Password Saat Ini</label>
+                    <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Masukkan password saat ini untuk verifikasi">
                 </div>
             </div>
 
@@ -388,6 +388,23 @@
                         img.src = event.target.result;
                     };
                     reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Toggle Current Password visibility
+        const newPasswordInput = document.getElementById('new_password');
+        const currentPasswordGroup = document.getElementById('current_password_group');
+        const currentPasswordInput = document.getElementById('current_password');
+
+        if (newPasswordInput && currentPasswordGroup) {
+            newPasswordInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    currentPasswordGroup.style.display = 'block';
+                    currentPasswordInput.setAttribute('required', 'required');
+                } else {
+                    currentPasswordGroup.style.display = 'none';
+                    currentPasswordInput.removeAttribute('required');
                 }
             });
         }
