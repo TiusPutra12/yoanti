@@ -222,7 +222,7 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
     $request->validate([
         'name' => 'required|string|max:255',
         'username' => 'required|string|max:255',
-        'current_password' => 'required|string',
+        'current_password' => 'nullable|string',
         'new_password' => 'nullable|string|min:6',
         'profession' => 'nullable|string|max:255',
         'skills' => 'nullable|string|max:255',
@@ -248,9 +248,14 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
 
     if ($userIndex === -1) return back()->with('error', 'User tidak ditemukan.');
 
-    // Verifikasi password lama
-    if (!Hash::check($request->current_password, $users[$userIndex]['password'])) {
-        return back()->with('error', 'Password saat ini salah.');
+    // Verifikasi password lama HANYA JIKA ganti password baru
+    if ($request->filled('new_password')) {
+        if (!$request->filled('current_password')) {
+            return back()->with('error', 'Masukkan password saat ini untuk dapat mengubah ke password baru.');
+        }
+        if (!Hash::check($request->current_password, $users[$userIndex]['password'])) {
+            return back()->with('error', 'Password saat ini salah.');
+        }
     }
 
     // Cek username bentrok

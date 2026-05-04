@@ -343,8 +343,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="current_password">Password Saat Ini (Wajib)</label>
-                    <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Masukkan password Anda saat ini untuk verifikasi" required>
+                    <label class="form-label" for="current_password">Konfirmasi Password Saat Ini (Diperlukan hanya jika ganti password)</label>
+                    <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Hanya diisi jika ingin mengubah password">
                 </div>
             </div>
 
