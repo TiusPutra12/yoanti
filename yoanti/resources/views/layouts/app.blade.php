@@ -699,6 +699,11 @@
 
                     <a href="{{ url('/komentar') }}"
                         class="nav-link {{ request()->is('komentar') ? 'active' : '' }}">Testimoni</a>
+
+                    @if (session()->has('user') && in_array(session('user')['role'], ['admin', 'superadmin', 'job_seeker']))
+                        <a href="{{ url('/penyedia-jasa') }}"
+                            class="nav-link {{ request()->is('penyedia-jasa') ? 'active' : '' }}">Penyedia Jasa</a>
+                    @endif
                 @endif
 
                 @if (session()->has('user') && isset(session('user')['role']) && session('user')['role'] === 'admin')
@@ -802,12 +807,17 @@
 
             <div class="user-dropdown">
                 <button type="button" onclick="toggleUserDropdown(event)" class="user-menu-btn"
-                    title="Menu Pengguna">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+                    title="Menu Pengguna" style="padding: 0; overflow: hidden;">
+                    @if (session()->has('user') && isset(session('user')['avatar']) && session('user')['avatar'])
+                        <img src="{{ asset(session('user')['avatar']) }}" alt="Avatar"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    @endif
                 </button>
                 <div id="userMenuDropdown" class="dropdown-content">
                     @if (session()->has('user'))
@@ -815,6 +825,18 @@
                             <strong>{{ session('user')['name'] }}</strong>
                             <span>{{ session('user')['role'] ?? 'User' }}</span>
                         </div>
+                        @if (isset(session('user')['role']) && session('user')['role'] === 'job_provider')
+                            <a href="{{ url('/penyedia-jasa/' . session('user')['username']) }}">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Lihat Profil Saya
+                            </a>
+                        @endif
+
                         @if (
                             !isset(session('user')['role']) ||
                                 (session('user')['role'] !== 'admin' && session('user')['role'] !== 'superadmin'))

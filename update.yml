@@ -1,0 +1,15 @@
+=== TiusPutra12 ====
+Update ui/ux admin & user 
+  1. Pesanan Saya
+    -> button selesai jika pesanan selesai
+    -> button ratting jika pesanan selesai
+  2. Penyedia Jasa
+    -> Card Penyedia Jasa
+    -> button Hubungi saya (Connect WA)
+    -> Ratting penyedia jasa
+
+  All
+    -> Update routes/web.php (rute GET detail penyedia, POST komentar, POST reply, cascading sync).
+    -> Update resources/views/penyedia-jasa.blade.php (tambahkan link profil).
+    -> Buat resources/views/penyedia-detail.blade.php (profil, produk, kolom komentar).
+    -> Buat file walkthrough.md.

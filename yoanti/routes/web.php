@@ -227,7 +227,10 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
         'profession' => 'nullable|string|max:255',
         'skills' => 'nullable|string|max:255',
         'workplace' => 'nullable|string|max:255',
-        'payment_method' => 'nullable|string|max:255'
+        'payment_method' => 'nullable|string|max:255',
+        'phone_number' => 'nullable|string|max:255',
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072'
     ]);
 
     $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
@@ -262,6 +265,7 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
     $oldUsername = $currentUser['username'];
     $newUsername = $request->username;
     $newName = $request->name;
+    $newAvatar = isset($users[$userIndex]['avatar']) ? $users[$userIndex]['avatar'] : null;
 
     // Update data di users.json
     $users[$userIndex]['name'] = $newName;
@@ -270,15 +274,48 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
     if ($request->has('skills')) $users[$userIndex]['skills'] = $request->skills;
     if ($request->has('workplace')) $users[$userIndex]['workplace'] = $request->workplace;
     if ($request->has('payment_method')) $users[$userIndex]['payment_method'] = $request->payment_method;
+    if ($request->has('phone_number')) $users[$userIndex]['phone_number'] = $request->phone_number;
     
     if ($request->filled('new_password')) {
         $users[$userIndex]['password'] = Hash::make($request->new_password);
     }
 
+    // Handle Avatar Upload
+    if ($request->hasFile('avatar')) {
+        $imageName = time() . '_' . $request->username . '.' . $request->avatar->extension();
+        $request->avatar->move(public_path('img'), $imageName);
+        
+        // Hapus avatar lama jika ada
+        if (isset($users[$userIndex]['avatar']) && $users[$userIndex]['avatar']) {
+            $oldPath = public_path($users[$userIndex]['avatar']);
+            if (file_exists($oldPath) && strpos($users[$userIndex]['avatar'], 'img/') === 0) {
+                unlink($oldPath);
+            }
+        }
+        
+        $users[$userIndex]['avatar'] = 'img/' . $imageName;
+    }
+
+    // Handle Cover Photo Upload
+    if ($request->hasFile('cover_photo')) {
+        $coverName = 'cover_' . time() . '_' . $request->username . '.' . $request->cover_photo->extension();
+        $request->cover_photo->move(public_path('img'), $coverName);
+        
+        // Hapus cover lama jika ada
+        if (isset($users[$userIndex]['cover_photo']) && $users[$userIndex]['cover_photo']) {
+            $oldCoverPath = public_path($users[$userIndex]['cover_photo']);
+            if (file_exists($oldCoverPath) && strpos($users[$userIndex]['cover_photo'], 'img/') === 0) {
+                unlink($oldCoverPath);
+            }
+        }
+        
+        $users[$userIndex]['cover_photo'] = 'img/' . $coverName;
+    }
+
     Storage::put('users.json', json_encode($users, JSON_PRETTY_PRINT));
 
-    // Jika username/nama berubah, sinkronisasi cascading
-    if ($oldUsername !== $newUsername || $currentUser['name'] !== $newName) {
+    // Jika username/nama/avatar berubah, sinkronisasi cascading
+    if ($oldUsername !== $newUsername || $currentUser['name'] !== $newName || (isset($currentUser['avatar']) ? $currentUser['avatar'] : null) !== $newAvatar) {
         // 1. Products
         if (Storage::exists('products.json')) {
             $prods = json_decode(Storage::get('products.json'), true);
@@ -324,6 +361,7 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
                     if (isset($c['username']) && $c['username'] === $oldUsername) {
                         $c['username'] = $newUsername;
                         $c['name'] = $newName;
+                        $c['avatar'] = $newAvatar;
                         $changed = true;
                     }
                     if (isset($c['replies']) && is_array($c['replies'])) {
@@ -331,6 +369,7 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
                             if (isset($r['username']) && $r['username'] === $oldUsername) {
                                 $r['username'] = $newUsername;
                                 $r['name'] = $newName;
+                                $r['avatar'] = $newAvatar;
                                 $changed = true;
                             }
                         }
@@ -354,6 +393,37 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
                 if ($changed) Storage::put('notifications.json', json_encode($notifs, JSON_PRETTY_PRINT));
             }
         }
+
+        // 5. Provider Comments
+        if (Storage::exists('provider_comments.json')) {
+            $pcomms = json_decode(Storage::get('provider_comments.json'), true);
+            $changed = false;
+            if (is_array($pcomms)) {
+                foreach ($pcomms as &$c) {
+                    if (isset($c['user_username']) && $c['user_username'] === $oldUsername) {
+                        $c['user_username'] = $newUsername;
+                        $c['user_name'] = $newName;
+                        $c['user_avatar'] = $newAvatar;
+                        $changed = true;
+                    }
+                    if (isset($c['provider_username']) && $c['provider_username'] === $oldUsername) {
+                        $c['provider_username'] = $newUsername;
+                        $changed = true;
+                    }
+                    if (isset($c['replies']) && is_array($c['replies'])) {
+                        foreach ($c['replies'] as &$r) {
+                            if (isset($r['username']) && $r['username'] === $oldUsername) {
+                                $r['username'] = $newUsername;
+                                $r['name'] = $newName;
+                                $r['avatar'] = $newAvatar;
+                                $changed = true;
+                            }
+                        }
+                    }
+                }
+                if ($changed) Storage::put('provider_comments.json', json_encode($pcomms, JSON_PRETTY_PRINT));
+            }
+        }
     }
 
     // Update Session
@@ -364,6 +434,9 @@ Route::post('/pengaturan-akun/update', function (Request $request) {
     if ($request->has('skills')) $updatedSession['skills'] = $request->skills;
     if ($request->has('workplace')) $updatedSession['workplace'] = $request->workplace;
     if ($request->has('payment_method')) $updatedSession['payment_method'] = $request->payment_method;
+    if ($request->has('phone_number')) $updatedSession['phone_number'] = $request->phone_number;
+    if (isset($users[$userIndex]['avatar'])) $updatedSession['avatar'] = $users[$userIndex]['avatar'];
+    if (isset($users[$userIndex]['cover_photo'])) $updatedSession['cover_photo'] = $users[$userIndex]['cover_photo'];
     session(['user' => $updatedSession]);
 
     return back()->with('success', 'Pengaturan akun berhasil diperbarui.');
@@ -386,7 +459,15 @@ Route::get('/admin/permintaan', function () {
         $orders = [];
     }
 
-    return view('admin.dashboard', compact('orders'));
+    // Ambil data user untuk nomor telepon
+    $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+    $usersList = json_decode($usersContent, true) ?: [];
+    $userPhones = [];
+    foreach ($usersList as $u) {
+        if (isset($u['phone_number'])) $userPhones[$u['username']] = $u['phone_number'];
+    }
+
+    return view('admin.dashboard', compact('orders', 'userPhones'));
 });
 
 // Admin Update Status Pesanan (Permintaan)
@@ -517,6 +598,7 @@ Route::post('/register', function (Request $request) {
         'skills' => 'required|string',
         'workplace' => 'nullable|string',
         'payment_method' => 'required|string',
+        'phone_number' => 'nullable|string',
         'terms' => 'accepted' // This ensures the checkbox is checked
     ]);
 
@@ -539,7 +621,8 @@ Route::post('/register', function (Request $request) {
         'profession' => $request->profession,
         'skills' => $request->skills,
         'workplace' => $request->workplace,
-        'payment_method' => $request->payment_method
+        'payment_method' => $request->payment_method,
+        'phone_number' => $request->phone_number
     ];
 
     Storage::put('users.json', json_encode($users, JSON_PRETTY_PRINT));
@@ -573,7 +656,16 @@ Route::prefix('superadmin')->group(function () {
     Route::get('/pesanan', function () use ($superadminCheck) {
         $superadminCheck();
         $orders = json_decode(Storage::exists('orders.json') ? Storage::get('orders.json') : '[]', true) ?: [];
-        return view('superadmin.pesanan', compact('orders'));
+        
+        // Ambil data user untuk nomor telepon
+        $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+        $usersList = json_decode($usersContent, true) ?: [];
+        $userPhones = [];
+        foreach ($usersList as $u) {
+            if (isset($u['phone_number'])) $userPhones[$u['username']] = $u['phone_number'];
+        }
+
+        return view('superadmin.pesanan', compact('orders', 'userPhones'));
     });
 
     Route::post('/pesanan/delete', function (Request $request) use ($superadminCheck) {
@@ -698,7 +790,406 @@ Route::get('/produk', function () {
     if (!is_array($products)) $products = [];
     $products = array_reverse($products);
     
-    return view('produk', compact('products'));
+    // Hitung rata-rata rating untuk masing-masing penyedia jasa
+    $ordersContent = Storage::exists('orders.json') ? Storage::get('orders.json') : '[]';
+    $orders = json_decode($ordersContent, true);
+    if (!is_array($orders)) $orders = [];
+    
+    $providerRatings = [];
+    foreach ($orders as $o) {
+        if (isset($o['provider_username']) && isset($o['rating'])) {
+            $pUser = $o['provider_username'];
+            if (!isset($providerRatings[$pUser])) {
+                $providerRatings[$pUser] = ['total' => 0, 'count' => 0];
+            }
+            $providerRatings[$pUser]['total'] += (float)$o['rating'];
+            $providerRatings[$pUser]['count']++;
+        }
+    }
+    
+    foreach ($products as &$p) {
+        $pUser = $p['username'];
+        if (isset($providerRatings[$pUser]) && $providerRatings[$pUser]['count'] > 0) {
+            $p['average_rating'] = round($providerRatings[$pUser]['total'] / $providerRatings[$pUser]['count'], 1);
+        } else {
+            $p['average_rating'] = 0;
+        }
+    }
+    
+    // Ambil data ulasan produk
+    $productReviews = [];
+    foreach ($orders as $o) {
+        if (isset($o['rating']) && isset($o['review']) && !empty($o['review'])) {
+            $productReviews[] = [
+                'id' => $o['id'],
+                'product_id' => $o['product_id'] ?? null,
+                'user_username' => $o['user_username'],
+                'user_name' => $o['name'] ?? 'Pelanggan',
+                'comment' => $o['review'],
+                'rating' => $o['rating'],
+                'created_at' => $o['created_at']
+            ];
+        }
+    }
+    usort($productReviews, function($a, $b) {
+        return strtotime($b['created_at']) - strtotime($a['created_at']);
+    });
+
+    // Ambil data avatar user
+    $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+    $users = json_decode($usersContent, true) ?: [];
+    $userAvatars = [];
+    foreach ($users as $u) {
+        if (isset($u['avatar'])) $userAvatars[$u['username']] = $u['avatar'];
+    }
+    
+    return view('produk', compact('products', 'productReviews', 'userAvatars'));
+});
+
+// Halaman Penyedia Jasa
+Route::get('/penyedia-jasa', function () {
+    if (!session()->has('user') || (session('user')['role'] !== 'admin' && session('user')['role'] !== 'superadmin' && session('user')['role'] !== 'job_seeker')) {
+        return redirect('/')->with('error', 'Akses ditolak.');
+    }
+
+    $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+    $users = json_decode($usersContent, true);
+    if (!is_array($users)) $users = [];
+    
+    $providers = array_filter($users, function($u) {
+        return isset($u['role']) && $u['role'] === 'job_provider';
+    });
+
+    $ordersContent = Storage::exists('orders.json') ? Storage::get('orders.json') : '[]';
+    $orders = json_decode($ordersContent, true);
+    if (!is_array($orders)) $orders = [];
+    
+    $providerRatings = [];
+    foreach ($orders as $o) {
+        if (isset($o['provider_username']) && isset($o['rating'])) {
+            $pUser = $o['provider_username'];
+            if (!isset($providerRatings[$pUser])) {
+                $providerRatings[$pUser] = ['total' => 0, 'count' => 0];
+            }
+            $providerRatings[$pUser]['total'] += (float)$o['rating'];
+            $providerRatings[$pUser]['count']++;
+        }
+    }
+    
+    foreach ($providers as &$p) {
+        $pUser = $p['username'];
+        if (isset($providerRatings[$pUser]) && $providerRatings[$pUser]['count'] > 0) {
+            $p['average_rating'] = round($providerRatings[$pUser]['total'] / $providerRatings[$pUser]['count'], 1);
+            $p['review_count'] = $providerRatings[$pUser]['count'];
+        } else {
+            $p['average_rating'] = 0;
+            $p['review_count'] = 0;
+        }
+
+        // Hitung Terjual (Sales)
+        $p['sales_count'] = count(array_filter($orders, function($o) use ($pUser) {
+            $status = strtolower($o['status'] ?? '');
+            return ($o['provider_username'] ?? '') === $pUser && ($status === 'selesai' || $status === 'diterima');
+        }));
+    }
+
+    return view('penyedia-jasa', compact('providers'));
+});
+
+// Halaman Detail Penyedia Jasa
+Route::get('/penyedia-jasa/{username}', function ($username) {
+    if (!session()->has('user')) return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
+
+    $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+    $users = json_decode($usersContent, true) ?: [];
+    
+    // Buat map avatar user untuk lookup di view
+    $userAvatars = [];
+    foreach ($users as $u) {
+        $userAvatars[$u['username']] = $u['avatar'] ?? null;
+    }
+    
+    $provider = null;
+    foreach ($users as $u) {
+        if ($u['username'] === $username && isset($u['role']) && $u['role'] === 'job_provider') {
+            $provider = $u;
+            break;
+        }
+    }
+
+    if (!$provider) {
+        return redirect('/penyedia-jasa')->with('error', 'Penyedia jasa tidak ditemukan.');
+    }
+
+    // Get Provider's Products
+    $productsContent = Storage::exists('products.json') ? Storage::get('products.json') : '[]';
+    $allProducts = json_decode($productsContent, true) ?: [];
+    $providerProducts = array_filter($allProducts, function($p) use ($username) {
+        return $p['username'] === $username;
+    });
+    $providerProducts = array_reverse($providerProducts);
+
+    // Get Provider's Rating from Orders
+    $ordersContent = Storage::exists('orders.json') ? Storage::get('orders.json') : '[]';
+    $orders = json_decode($ordersContent, true) ?: [];
+    $totalRating = 0;
+    $countRating = 0;
+    foreach ($orders as $o) {
+        if (isset($o['provider_username']) && $o['provider_username'] === $username && isset($o['rating'])) {
+            $totalRating += (float)$o['rating'];
+            $countRating++;
+        }
+    }
+    
+    if ($countRating > 0) {
+        $provider['average_rating'] = round($totalRating / $countRating, 1);
+        $provider['review_count'] = $countRating;
+    } else {
+        $provider['average_rating'] = 0;
+        $provider['review_count'] = 0;
+    }
+
+    // Hitung Terjual (Sales)
+    $salesCount = count(array_filter($orders, function($o) use ($username) {
+        $status = strtolower($o['status'] ?? '');
+        return ($o['provider_username'] ?? '') === $username && ($status === 'selesai' || $status === 'diterima');
+    }));
+
+    // Get Provider's Comments (General Account Discussions)
+    $commentsContent = Storage::exists('provider_comments.json') ? Storage::get('provider_comments.json') : '[]';
+    $allComments = json_decode($commentsContent, true) ?: [];
+    $providerComments = array_filter($allComments, function($c) use ($username) {
+        return isset($c['provider_username']) && $c['provider_username'] === $username;
+    });
+    $providerComments = array_reverse($providerComments);
+
+    // Get Product Reviews from Orders
+    $productReviews = [];
+    foreach ($orders as $o) {
+        if (isset($o['provider_username']) && $o['provider_username'] === $username && isset($o['rating']) && isset($o['review']) && !empty($o['review'])) {
+            $productReviews[] = [
+                'id' => $o['id'],
+                'product_id' => $o['product_id'] ?? null,
+                'user_username' => $o['user_username'],
+                'user_name' => $o['name'] ?? 'Pelanggan',
+                'comment' => $o['review'],
+                'rating' => $o['rating'],
+                'created_at' => $o['created_at']
+            ];
+        }
+    }
+    usort($productReviews, function($a, $b) {
+        return strtotime($b['created_at']) - strtotime($a['created_at']);
+    });
+
+    return view('penyedia-detail', compact('provider', 'providerProducts', 'providerComments', 'productReviews', 'userAvatars', 'salesCount'));
+});
+
+// Post Komentar ke Profil Penyedia Jasa
+Route::post('/penyedia-jasa/komentar', function (Request $request) {
+    if (!session()->has('user') || session('user')['role'] !== 'job_seeker') {
+        return back()->with('error', 'Hanya pencari jasa yang dapat memberikan komentar.');
+    }
+
+    $request->validate([
+        'provider_username' => 'required',
+        'comment' => 'required|string',
+    ]);
+
+    $commentsContent = Storage::exists('provider_comments.json') ? Storage::get('provider_comments.json') : '[]';
+    $comments = json_decode($commentsContent, true) ?: [];
+
+    $comments[] = [
+        'id' => uniqid('pcom_'),
+        'provider_username' => $request->provider_username,
+        'user_username' => session('user')['username'],
+        'user_name' => session('user')['name'],
+        'user_avatar' => session('user')['avatar'] ?? null,
+        'comment' => $request->comment,
+        'created_at' => now()->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i'),
+        'replies' => []
+    ];
+
+    Storage::put('provider_comments.json', json_encode($comments, JSON_PRETTY_PRINT));
+
+    if (function_exists('addNotification')) {
+        addNotification($request->provider_username, 'comment', 'Komentar Baru', session('user')['name'] . ' menulis komentar di profil Anda.');
+    }
+
+    return back()->with('success', 'Komentar berhasil dikirim.');
+});
+
+// Balas Komentar di Profil Penyedia Jasa
+Route::post('/penyedia-jasa/komentar/reply', function (Request $request) {
+    if (!session()->has('user') || session('user')['role'] !== 'job_provider') {
+        return back()->with('error', 'Hanya penyedia jasa yang dapat membalas komentar.');
+    }
+
+    $request->validate([
+        'comment_id' => 'required',
+        'reply_comment' => 'required|string',
+    ]);
+
+    $commentsContent = Storage::exists('provider_comments.json') ? Storage::get('provider_comments.json') : '[]';
+    $comments = json_decode($commentsContent, true) ?: [];
+
+    $parentUser = null;
+    foreach ($comments as &$c) {
+        if ($c['id'] === $request->comment_id && $c['provider_username'] === session('user')['username']) {
+            $parentUser = $c['user_username'];
+            if (!isset($c['replies'])) $c['replies'] = [];
+            $c['replies'][] = [
+                'id' => uniqid('prep_'),
+                'username' => session('user')['username'],
+                'name' => session('user')['name'],
+                'avatar' => session('user')['avatar'] ?? null,
+                'comment' => $request->reply_comment,
+                'created_at' => now()->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i'),
+            ];
+            break;
+        }
+    }
+
+    Storage::put('provider_comments.json', json_encode($comments, JSON_PRETTY_PRINT));
+    
+    if (function_exists('addNotification') && $parentUser) {
+        addNotification($parentUser, 'comment', 'Balasan Baru', session('user')['name'] . ' membalas komentar Anda di profilnya.');
+    }
+
+    return back()->with('success', 'Balasan berhasil dikirim.');
+});
+
+// Edit Komentar di Profil Penyedia Jasa
+Route::post('/penyedia-jasa/komentar/update', function (Request $request) {
+    if (!session()->has('user')) return back()->with('error', 'Silakan login terlebih dahulu.');
+
+    $request->validate([
+        'comment_id' => 'required',
+        'comment' => 'required|string',
+    ]);
+
+    $commentsContent = Storage::exists('provider_comments.json') ? Storage::get('provider_comments.json') : '[]';
+    $comments = json_decode($commentsContent, true) ?: [];
+
+    $updated = false;
+    foreach ($comments as &$c) {
+        // Cek apakah ini komentar utama dan miliknya
+        if ($c['id'] === $request->comment_id && $c['user_username'] === session('user')['username']) {
+            $c['comment'] = $request->comment;
+            $c['updated_at'] = now()->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i');
+            $updated = true;
+            break;
+        }
+        
+        // Cek apakah ini balasan dan miliknya
+        if (isset($c['replies']) && is_array($c['replies'])) {
+            foreach ($c['replies'] as &$r) {
+                if ($r['id'] === $request->comment_id && $r['username'] === session('user')['username']) {
+                    $r['comment'] = $request->comment;
+                    $r['updated_at'] = now()->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i');
+                    $updated = true;
+                    break 2;
+                }
+            }
+        }
+    }
+
+    if ($updated) {
+        Storage::put('provider_comments.json', json_encode($comments, JSON_PRETTY_PRINT));
+        return back()->with('success', 'Komentar berhasil diperbarui.');
+    }
+
+    return back()->with('error', 'Komentar tidak ditemukan atau Anda tidak memiliki akses.');
+});
+
+// Hapus Komentar di Profil Penyedia Jasa
+Route::post('/penyedia-jasa/komentar/delete', function (Request $request) {
+    if (!session()->has('user')) return back()->with('error', 'Silakan login terlebih dahulu.');
+
+    $request->validate([
+        'comment_id' => 'required',
+    ]);
+
+    $commentsContent = Storage::exists('provider_comments.json') ? Storage::get('provider_comments.json') : '[]';
+    $comments = json_decode($commentsContent, true) ?: [];
+
+    $newComments = [];
+    $deleted = false;
+
+    foreach ($comments as $c) {
+        // Jika ini komentar utama
+        if ($c['id'] === $request->comment_id) {
+            // Hanya penulis atau superadmin yang bisa hapus
+            if ($c['user_username'] === session('user')['username'] || session('user')['role'] === 'superadmin') {
+                $deleted = true;
+                continue; // Jangan masukkan ke array baru
+            }
+        }
+
+        // Cek replies
+        if (isset($c['replies']) && is_array($c['replies'])) {
+            $newReplies = [];
+            foreach ($c['replies'] as $r) {
+                if ($r['id'] === $request->comment_id) {
+                    if ($r['username'] === session('user')['username'] || session('user')['role'] === 'superadmin') {
+                        $deleted = true;
+                        continue;
+                    }
+                }
+                $newReplies[] = $r;
+            }
+            $c['replies'] = $newReplies;
+        }
+        $newComments[] = $c;
+    }
+
+    if ($deleted) {
+        Storage::put('provider_comments.json', json_encode(array_values($newComments), JSON_PRETTY_PRINT));
+        return back()->with('success', 'Komentar berhasil dihapus.');
+    }
+
+    return back()->with('error', 'Komentar tidak ditemukan atau Anda tidak memiliki akses.');
+});
+
+// Proses Selesaikan Pesanan & Beri Rating
+Route::post('/pesanan/selesai', function (Request $request) {
+    if (!session()->has('user')) return back()->with('error', 'Silakan login terlebih dahulu.');
+
+    $request->validate([
+        'order_id' => 'required',
+        'rating' => 'required|numeric|min:1|max:5',
+        'review' => 'nullable|string'
+    ]);
+
+    $ordersContent = Storage::exists('orders.json') ? Storage::get('orders.json') : '[]';
+    $orders = json_decode($ordersContent, true);
+    if (!is_array($orders)) $orders = [];
+
+    $updated = false;
+    $orderInfo = null;
+    foreach ($orders as &$o) {
+        if ($o['id'] === $request->order_id && $o['user_username'] === session('user')['username']) {
+            $o['status'] = 'Selesai';
+            $o['rating'] = $request->rating;
+            $o['review'] = $request->review;
+            $orderInfo = $o;
+            $updated = true;
+            break;
+        }
+    }
+
+    if ($updated) {
+        Storage::put('orders.json', json_encode($orders, JSON_PRETTY_PRINT));
+        
+        if (function_exists('addNotification') && $orderInfo && isset($orderInfo['provider_username'])) {
+            addNotification($orderInfo['provider_username'], 'rating', 'Pesanan Selesai', session('user')['name'] . ' telah menyelesaikan pesanan dan memberikan rating ' . $request->rating . ' bintang.');
+            addNotification('@admins', 'order', 'Pesanan Selesai', 'Pesanan ' . $request->order_id . ' telah diselesaikan oleh ' . session('user')['username'] . '.');
+        }
+        
+        return back()->with('success', 'Terima kasih! Pesanan diselesaikan dan rating berhasil dikirim.');
+    }
+
+    return back()->with('error', 'Pesanan tidak ditemukan atau Anda tidak memiliki akses.');
 });
 
 // Grup Rute Penyedia Jasa
@@ -804,7 +1295,15 @@ Route::prefix('penyedia')->group(function () {
         });
         $myOrders = array_reverse($myOrders);
 
-        return view('penyedia.pesanan', compact('myOrders'));
+        // Ambil data user untuk nomor telepon
+        $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+        $usersList = json_decode($usersContent, true) ?: [];
+        $userPhones = [];
+        foreach ($usersList as $u) {
+            if (isset($u['phone_number'])) $userPhones[$u['username']] = $u['phone_number'];
+        }
+
+        return view('penyedia.pesanan', compact('myOrders', 'userPhones'));
     });
 
     Route::post('/pesanan/status', function (Request $request) use ($providerCheck) {

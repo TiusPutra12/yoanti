@@ -172,6 +172,84 @@
                 margin-right: 0.75rem;
             }
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 450px;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .modal-header h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+        .close-modal:hover {
+            color: var(--error);
+        }
+        /* Star Rating */
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            cursor: pointer;
+            font-size: 2.5rem;
+            color: #E2E8F0;
+            transition: color 0.2s;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #F59E0B;
+        }
     </style>
 @endpush
 
@@ -194,6 +272,7 @@
                                 <th>Layanan</th>
                                 <th>Instansi</th>
                                 <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -206,6 +285,15 @@
                                         <span class="status-badge status-{{ strtolower($order['status']) }}">
                                             {{ $order['status'] }}
                                         </span>
+                                    </td>
+                                    <td data-label="Aksi">
+                                        @if(strtolower($order['status']) === 'diterima')
+                                            <button type="button" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-radius: 8px;" onclick="openRatingModal('{{ $order['id'] }}', '{{ addslashes($order['programType']) }}')">
+                                                Selesaikan
+                                            </button>
+                                        @else
+                                            <span style="color: var(--text-muted); font-size: 0.8rem;">-</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -230,4 +318,66 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Rating -->
+    <div id="ratingModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Selesaikan & Nilai Pesanan</h3>
+                <button type="button" class="close-modal" onclick="closeRatingModal()">&times;</button>
+            </div>
+            <form action="{{ url('/pesanan/selesai') }}" method="POST" id="ratingForm">
+                @csrf
+                <input type="hidden" name="order_id" id="modal_order_id">
+                
+                <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                    Bagaimana pengalaman Anda menggunakan layanan <strong id="modal_program_type" style="color: var(--text-main);"></strong>?
+                </p>
+
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" required />
+                    <label for="star5" title="5 Bintang">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" />
+                    <label for="star4" title="4 Bintang">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" />
+                    <label for="star3" title="3 Bintang">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label for="star2" title="2 Bintang">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label for="star1" title="1 Bintang">★</label>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <textarea name="review" style="width: 100%; min-height: 80px; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Inter', sans-serif; resize: vertical;" placeholder="Tuliskan ulasan Anda (Opsional)..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; border-radius: 8px; padding: 0.75rem; justify-content: center;">Kirim Penilaian</button>
+            </form>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+<script>
+    function openRatingModal(id, program) {
+        document.getElementById('modal_order_id').value = id;
+        document.getElementById('modal_program_type').textContent = program;
+        // Reset stars
+        const stars = document.querySelectorAll('.star-rating input');
+        stars.forEach(star => star.checked = false);
+        
+        document.getElementById('ratingModal').classList.add('active');
+    }
+    
+    function closeRatingModal() {
+        document.getElementById('ratingModal').classList.remove('active');
+    }
+    
+    window.addEventListener('click', function(e) {
+        const modal = document.getElementById('ratingModal');
+        if (e.target === modal) {
+            closeRatingModal();
+        }
+    });
+</script>
+@endpush

@@ -211,6 +211,91 @@
         .close-modal:hover {
             color: var(--error);
         }
+        .btn-review-link:hover {
+            background: #EFF6FF;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Ulasan */
+        .reviews-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .reviews-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .reviews-modal-content {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .reviews-modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #F1F5F9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F8FAFC;
+        }
+
+        .reviews-modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .btn-close-modal {
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #64748B;
+            transition: all 0.2s;
+        }
+
+        .btn-close-modal:hover {
+            background: #F1F5F9;
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .reviews-modal-body {
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 @endpush
 
@@ -236,18 +321,30 @@
                                     <div class="provider-avatar">
                                         {{ strtoupper(substr($product['name'], 0, 1)) }}
                                     </div>
-                                    <span class="provider-name">{{ $product['name'] }}</span>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span class="provider-name">{{ $product['name'] }}</span>
+                                        @if(isset($product['average_rating']) && $product['average_rating'] > 0)
+                                            <span style="color: #F59E0B; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 0.15rem;">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                                                {{ $product['average_rating'] }}
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
                                 <span class="product-date">{{ explode(',', $product['created_at'])[0] ?? '' }}</span>
                             </div>
 
-                            @if(session()->has('user') && session('user')['role'] === 'job_seeker')
-                            <div style="margin-top: 1rem;">
-                                <button type="button" class="btn-primary" style="width: 100%; border-radius: 8px; padding: 0.6rem;" onclick="openBuyModal('{{ $product['id'] }}', '{{ addslashes($product['title']) }}', '{{ $product['username'] }}', '{{ addslashes($product['price'] ?? '') }}')">
-                                    Pesan Layanan Ini
+                            <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                <button type="button" onclick="openReviewsModal('{{ $product['id'] }}', '{{ addslashes($product['title']) }}')" class="btn-review-link" style="width: 100%; border: 1px solid var(--primary); background: transparent; color: var(--primary); font-size: 0.85rem; font-weight: 600; padding: 0.6rem; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                    Lihat Ulasan
                                 </button>
+                                
+                                @if(session()->has('user') && session('user')['role'] === 'job_seeker')
+                                    <button type="button" class="btn-primary" style="width: 100%; border-radius: 8px; padding: 0.6rem;" onclick="openBuyModal('{{ $product['id'] }}', '{{ addslashes($product['title']) }}', '{{ $product['username'] }}', '{{ addslashes($product['price'] ?? '') }}')">
+                                        Pesan Layanan Ini
+                                    </button>
+                                @endif
                             </div>
-                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -295,7 +392,84 @@
 @endsection
 
 @push('scripts')
+    <!-- Modal Ulasan Produk -->
+    <div id="reviewsModal" class="reviews-modal">
+        <div class="reviews-modal-content">
+            <div class="reviews-modal-header">
+                <div>
+                    <h3 id="modalProductTitle">Ulasan Produk</h3>
+                    <p style="font-size: 0.8rem; color: #64748B; margin: 0.2rem 0 0 0;">Daftar testimoni untuk layanan ini</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeReviewsModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="reviews-modal-body" id="modalReviewsBody">
+                <!-- Content populated by JS -->
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Data ulasan produk untuk JS
+        const productReviews = @json($productReviews);
+        const userAvatars = @json($userAvatars);
+
+        function openReviewsModal(productId, productTitle) {
+            const modal = document.getElementById('reviewsModal');
+            const body = document.getElementById('modalReviewsBody');
+            const title = document.getElementById('modalProductTitle');
+            
+            title.innerText = 'Ulasan: ' + productTitle;
+            body.innerHTML = '';
+
+            const filteredReviews = productReviews.filter(r => r.product_id === productId);
+
+            if (filteredReviews.length === 0) {
+                body.innerHTML = `<div style="text-align: center; padding: 3rem 1rem; color: #94A3B8;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.3 8.38 8.38 0 0 1 3.8.9L21 3z"></path>
+                    </svg>
+                    <p>Belum ada ulasan untuk layanan ini.</p>
+                </div>`;
+            } else {
+                filteredReviews.forEach(review => {
+                    const avatarPath = userAvatars[review.user_username] || review.user_avatar;
+                    const stars = Array.from({length: 5}, (_, i) => {
+                        const fill = (i + 1) <= review.rating ? '#F59E0B' : '#E2E8F0';
+                        return `<svg width="14" height="14" viewBox="0 0 24 24" fill="${fill}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>`;
+                    }).join('');
+
+                    body.innerHTML += `
+                        <div style="margin-bottom: 1.5rem; border-bottom: 1px solid #F1F5F9; padding-bottom: 1rem; display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 40px; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #F1F5F9; color: var(--primary); flex-shrink: 0; border-radius: 50%;">
+                                ${avatarPath ? `<img src="/${avatarPath}" style="width: 100%; height: 100%; object-fit: cover;">` : review.user_name.charAt(0).toUpperCase()}
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                                    <span style="font-weight: 700; color: #1E293B;">${review.user_name}</span>
+                                    <span style="font-size: 0.75rem; color: #94A3B8;">${review.created_at}</span>
+                                </div>
+                                <div style="display: flex; gap: 2px; margin-bottom: 0.5rem;">${stars}</div>
+                                <div style="font-size: 0.9rem; color: #475569; line-height: 1.5;">${review.comment}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReviewsModal() {
+            document.getElementById('reviewsModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
         function openBuyModal(id, title, provider, price) {
             document.getElementById('modal_product_id').value = id;
             document.getElementById('modal_product_title').value = title;
