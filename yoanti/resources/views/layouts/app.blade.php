@@ -1290,17 +1290,6 @@
                     @endif
                 </button>
             @else
-                <div class="guest-nav-actions"
-                    style="display: flex; align-items: center; gap: 0.75rem; margin-right: 0.5rem;">
-                    <a href="{{ url('/login') }}" class="btn-guest-login"
-                        style="font-weight: 700; font-size: 0.875rem; color: var(--text-main); padding: 0.5rem 1rem; text-decoration: none; border-radius: 10px; transition: var(--transition);">
-                        Masuk
-                    </a>
-                    <a href="{{ url('/register') }}" class="btn-primary"
-                        style="padding: 0.55rem 1.25rem; font-size: 0.875rem; border-radius: 10px;">
-                        Mulai Sekarang
-                    </a>
-                </div>
             @endif
 
             <div class="user-dropdown">
