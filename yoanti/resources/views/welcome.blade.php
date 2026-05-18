@@ -10,7 +10,9 @@
             align-items: center;
             text-align: center;
             padding: clamp(4rem, 12vh, 7rem) clamp(1rem, 5%, 2rem) clamp(3rem, 8vh, 5rem);
-            background: linear-gradient(160deg, #EFF6FF 0%, #F8FAFC 50%, #FFFFFF 100%);
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.8) 100%), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
             position: relative;
             overflow: hidden;
         }

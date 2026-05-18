@@ -5,7 +5,10 @@
     <style>
         .comments-page {
             padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 5%, 2rem);
-            background: #F8FAFC;
+            background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: calc(100dvh - var(--nav-height));
         }
 

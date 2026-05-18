@@ -475,6 +475,49 @@ Route::get('/admin/permintaan', function () {
     return view('admin.dashboard', compact('orders', 'userPhones'));
 });
 
+// Admin Export Excel
+Route::get('/admin/permintaan/export', function () {
+    if (!session()->has('user') || session('user')['role'] !== 'admin') {
+        return redirect('/')->with('error', 'Akses ditolak.');
+    }
+    
+    $ordersContent = Storage::exists('orders.json') ? Storage::get('orders.json') : '[]';
+    $orders = json_decode($ordersContent, true) ?: [];
+    $filteredOrders = array_filter($orders, function($o) {
+        return !isset($o['provider_username']);
+    });
+
+    $filename = "laporan_permintaan_" . date('Y-m-d_H-i-s') . ".csv";
+    $headers = [
+        "Content-type"        => "text/csv",
+        "Content-Disposition" => "attachment; filename=$filename",
+        "Pragma"              => "no-cache",
+        "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+        "Expires"             => "0"
+    ];
+
+    $columns = ['ID', 'Tanggal', 'Klien', 'Perusahaan', 'Layanan', 'Budget', 'Deskripsi', 'Status'];
+
+    $callback = function() use($filteredOrders, $columns) {
+        $file = fopen('php://output', 'w');
+        fputcsv($file, $columns);
+        foreach (array_reverse($filteredOrders) as $order) {
+            fputcsv($file, [
+                $order['id'] ?? '-',
+                $order['created_at'] ?? '-',
+                $order['name'] ?? '-',
+                $order['company'] ?? '-',
+                $order['programType'] ?? '-',
+                $order['budget'] ?? '-',
+                $order['description'] ?? '-',
+                $order['status'] ?? '-'
+            ]);
+        }
+        fclose($file);
+    };
+    return response()->stream($callback, 200, $headers);
+});
+
 // Admin Update Status Pesanan (Permintaan)
 Route::post('/admin/permintaan/status', function (Request $request) {
     if (!session()->has('user') || session('user')['role'] !== 'admin') {
@@ -671,6 +714,41 @@ Route::prefix('superadmin')->group(function () {
         }
 
         return view('superadmin.pesanan', compact('orders', 'userPhones'));
+    });
+
+    Route::get('/pesanan/export', function () use ($superadminCheck) {
+        $superadminCheck();
+        $orders = json_decode(Storage::exists('orders.json') ? Storage::get('orders.json') : '[]', true) ?: [];
+
+        $filename = "laporan_pesanan_" . date('Y-m-d_H-i-s') . ".csv";
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = ['ID', 'Tanggal', 'Klien', 'Penyedia Jasa', 'Layanan', 'Budget', 'Status', 'Rating'];
+
+        $callback = function() use($orders, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+            foreach (array_reverse($orders) as $order) {
+                fputcsv($file, [
+                    $order['id'] ?? '-',
+                    $order['created_at'] ?? '-',
+                    $order['name'] ?? '-',
+                    $order['provider_username'] ?? '-',
+                    $order['programType'] ?? '-',
+                    $order['budget'] ?? '-',
+                    $order['status'] ?? '-',
+                    $order['rating'] ?? '-'
+                ]);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
     });
 
     Route::post('/pesanan/delete', function (Request $request) use ($superadminCheck) {

@@ -97,23 +97,25 @@
         }
 
         .btn-delete {
-            background: rgba(255, 255, 255, 0.9);
-            color: #DC2626;
+            background: rgba(220, 38, 38, 0.9);
+            color: white;
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.25);
+            backdrop-filter: blur(4px);
         }
 
         .btn-delete:hover {
-            background: #FEE2E2;
-            transform: scale(1.05);
+            background: rgba(220, 38, 38, 1);
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.35);
         }
 
         .product-info {
