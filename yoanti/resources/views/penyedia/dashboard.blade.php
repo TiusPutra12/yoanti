@@ -3,6 +3,14 @@
 
 @push('styles')
     <style>
+        .dashboard-page {
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: calc(100dvh - var(--nav-height));
+        }
+
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -185,9 +193,10 @@
 @endpush
 
 @section('content')
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <div class="dashboard-title-area">
+    <div class="dashboard-page">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <div class="dashboard-title-area">
                 <h1>Dashboard Portofolio</h1>
                 <p>Kelola portofolio layanan dan produk yang Anda tawarkan.</p>
             </div>
@@ -246,5 +255,6 @@
                 <a href="{{ url('/penyedia/produk/create') }}" class="btn-add" style="box-shadow: none;">Tambah Portofolio Pertama</a>
             </div>
         @endif
+        </div>
     </div>
 @endsection

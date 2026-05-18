@@ -22,6 +22,11 @@
         .profile-page {
             padding: 2rem 1rem 4rem;
             font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: calc(100dvh - var(--nav-height));
         }
 
         .container {

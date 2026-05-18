@@ -3,6 +3,14 @@
 
 @push('styles')
     <style>
+        .orders-page {
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: calc(100dvh - var(--nav-height));
+        }
+
         .orders-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -196,11 +204,12 @@
 @endpush
 
 @section('content')
-    <div class="orders-container">
-        <div class="orders-header">
-            <h1>Pesanan Masuk</h1>
-            <p>Kelola pesanan klien yang tertarik dengan produk portofolio Anda.</p>
-        </div>
+    <div class="orders-page">
+        <div class="orders-container">
+            <div class="orders-header">
+                <h1>Pesanan Masuk</h1>
+                <p>Kelola pesanan klien yang tertarik dengan produk portofolio Anda.</p>
+            </div>
 
         @if(session('success'))
             <div style="background: #ECFDF5; color: #059669; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; border: 1px solid #A7F3D0;">
@@ -306,5 +315,6 @@
                 <p>Belum ada klien yang memesan layanan portofolio Anda.</p>
             </div>
         @endif
+        </div>
     </div>
 @endsection
