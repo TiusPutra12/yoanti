@@ -104,26 +104,75 @@
             gap: 0.5rem;
         }
 
-        .btn-delete {
-            background: rgba(220, 38, 38, 0.9);
-            color: white;
+        .btn-kebab {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-main);
             border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.25);
-            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .btn-delete:hover {
-            background: rgba(220, 38, 38, 1);
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.35);
+        .btn-kebab:hover {
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            min-width: 140px;
+            z-index: 20;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: left;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+
+        .dropdown-item:hover {
+            background: #F8FAFC;
+            color: var(--primary);
+        }
+
+        .dropdown-item.text-danger {
+            color: #DC2626;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: #FEF2F2;
+            color: #B91C1C;
         }
 
         .product-info {
@@ -217,18 +266,37 @@
                             <img src="{{ asset($p['image']) }}" alt="{{ $p['title'] }}" class="product-img" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
                             
                             <div class="product-actions">
-                                <form action="{{ url('/penyedia/produk/delete') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{ $p['id'] }}">
-                                    <button type="submit" class="btn-delete" title="Hapus Portofolio">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            <line x1="10" y1="11" x2="10" y2="17"></line>
-                                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                                <div class="dropdown-wrapper" style="position: relative;">
+                                    <button class="btn-kebab" onclick="toggleDropdown('dropdown-{{ $p['id'] }}')">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="1"></circle>
+                                            <circle cx="12" cy="5" r="1"></circle>
+                                            <circle cx="12" cy="19" r="1"></circle>
                                         </svg>
                                     </button>
-                                </form>
+                                    <div id="dropdown-{{ $p['id'] }}" class="dropdown-menu">
+                                        <a href="{{ url('/penyedia/produk/edit/' . $p['id']) }}" class="dropdown-item">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                            </svg>
+                                            Edit
+                                        </a>
+                                        <form action="{{ url('/penyedia/produk/delete') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');" style="margin: 0;">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $p['id'] }}">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                </svg>
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="product-info">
@@ -258,3 +326,30 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            const isShowing = el.classList.contains('show');
+            
+            // Close all dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+
+            if (!isShowing) {
+                el.classList.add('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown-wrapper')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+    </script>
+@endpush

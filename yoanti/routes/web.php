@@ -1335,6 +1335,69 @@ Route::prefix('penyedia')->group(function () {
         return redirect('/penyedia/dashboard')->with('success', 'Produk berhasil ditambahkan!');
     });
 
+    Route::get('/produk/edit/{id}', function ($id) use ($providerCheck) {
+        $providerCheck();
+        $productsContent = Storage::exists('products.json') ? Storage::get('products.json') : '[]';
+        $products = json_decode($productsContent, true) ?: [];
+        $product = null;
+        foreach ($products as $p) {
+            if ($p['id'] === $id && $p['username'] === session('user')['username']) {
+                $product = $p;
+                break;
+            }
+        }
+        if (!$product) {
+            return redirect('/penyedia/dashboard')->with('error', 'Produk tidak ditemukan atau Anda tidak memiliki akses.');
+        }
+        return view('penyedia.produk_edit', compact('product'));
+    });
+
+    Route::post('/produk/update', function (Request $request) use ($providerCheck) {
+        $providerCheck();
+        
+        $request->validate([
+            'id' => 'required',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120'
+        ]);
+
+        $productsContent = Storage::exists('products.json') ? Storage::get('products.json') : '[]';
+        $products = json_decode($productsContent, true) ?: [];
+        
+        $updated = false;
+        foreach ($products as &$p) {
+            if ($p['id'] === $request->id && $p['username'] === session('user')['username']) {
+                $p['title'] = $request->title;
+                $p['description'] = $request->description;
+                $p['price'] = $request->price;
+                
+                if ($request->hasFile('image')) {
+                    // hapus gambar lama jika bukan default
+                    if(isset($p['image']) && strpos($p['image'], 'img/') === 0) {
+                        $oldImagePath = public_path($p['image']);
+                        if (file_exists($oldImagePath)) {
+                            @unlink($oldImagePath);
+                        }
+                    }
+                    $imageName = time().'.'.$request->image->extension();  
+                    $request->image->move(public_path('img'), $imageName);
+                    $p['image'] = 'img/' . $imageName;
+                }
+                $updated = true;
+                break;
+            }
+        }
+
+        if ($updated) {
+            Storage::put('products.json', json_encode($products, JSON_PRETTY_PRINT));
+            return redirect('/penyedia/dashboard')->with('success', 'Produk berhasil diperbarui!');
+        }
+        
+        return redirect('/penyedia/dashboard')->with('error', 'Produk gagal diperbarui.');
+    });
+
     Route::post('/produk/delete', function (Request $request) use ($providerCheck) {
         $providerCheck();
         
