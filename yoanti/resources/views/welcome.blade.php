@@ -324,19 +324,19 @@
 @section('content')
     <section class="hero">
         <div class="hero-content">
-            <h1>Wujudkan <span>Website & Aplikasi Impian</span> Anda</h1>
-            <p>Pengembangan perangkat lunak kelas enterprise dengan desain premium dan performa tanpa kompromi untuk bisnis modern Anda.</p>
+            <h1 class="animate-fade-in-up">Wujudkan <span>Website & Aplikasi Impian</span> Anda</h1>
+            <p class="animate-fade-in-up stagger-1">Pengembangan perangkat lunak kelas enterprise dengan desain premium dan performa tanpa kompromi untuk bisnis modern Anda.</p>
 
             @if (!session()->has('user') || (isset(session('user')['role']) && session('user')['role'] !== 'admin'))
-                <div class="hero-cta">
-                    <a href="{{ url('/pesan') }}" class="btn-primary btn-cta">
+                <div class="hero-cta animate-fade-in-up stagger-2">
+                    <a href="{{ url('/pesan') }}" class="btn-primary btn-cta hover-lift">
                         {{ session()->has('user') ? 'Pesan Sekarang' : 'Mulai Transformasi' }}
                     </a>
-                    <a href="{{ url('/komentar') }}" class="btn-outline">Lihat Portfolio</a>
+                    <a href="{{ url('/komentar') }}" class="btn-outline hover-lift">Lihat Portfolio</a>
                 </div>
             @endif
 
-            <div class="hero-trust">
+            <div class="hero-trust animate-fade-in-up stagger-3">
                 <span class="trust-item">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -363,7 +363,7 @@
     </section>
 
     <section class="stats-bar">
-        <div class="stats-grid">
+        <div class="stats-grid animate-fade-in-up">
             <div class="stat-item">
                 <div class="stat-number">{{ isset($completedProjects) ? $completedProjects : '0' }}</div>
                 <div class="stat-label">Proyek Selesai</div>
@@ -384,7 +384,7 @@
     </section>
 
     <section class="services">
-        <div class="section-header">
+        <div class="section-header animate-fade-in-up">
             <span class="section-badge">Layanan Kami</span>
             <h2 class="section-title">Solusi Digital Lengkap</h2>
             <p class="section-subtitle">Dari ideasi hingga peluncuran, kami hadir untuk setiap tahap perjalanan digital
@@ -392,21 +392,21 @@
         </div>
 
         <div class="services-grid">
-            <div class="service-card">
+            <div class="service-card animate-fade-in-up hover-lift stagger-1">
                 <div class="icon-wrapper">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </div>
                 <h3>Pembuatan Website</h3>
                 <p>Dari landing page hingga e-commerce kompleks — desain responsif, cepat, interaktif, dan SEO-ready.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card animate-fade-in-up hover-lift stagger-2">
                 <div class="icon-wrapper">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
                 </div>
                 <h3>Aplikasi Android</h3>
                 <p>Aplikasi mobile native dan cross-platform interaktif untuk memperluas jangkauan bisnis Anda tanpa batas.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card animate-fade-in-up hover-lift stagger-3">
                 <div class="icon-wrapper">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
                 </div>

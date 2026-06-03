@@ -211,8 +211,9 @@
 @section('content')
     <section class="auth-page">
 
-        <div class="auth-wrapper">
-            <div class="auth-logo-area">
+        <div class="auth-wrapper" style="position: relative;">
+            <div style="position: absolute; top: -2rem; right: 0; font-size: 0.75rem; font-weight: 700; color: var(--primary); background: rgba(239, 246, 255, 0.8); backdrop-filter: blur(4px); padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid rgba(59, 130, 246, 0.2); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">v3.1</div>
+            <div class="auth-logo-area animate-fade-in-up">
                 <a href="{{ url('/') }}" class="brand">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
@@ -223,7 +224,7 @@
                 <p>Platform jasa digital profesional</p>
             </div>
 
-            <div class="auth-card">
+            <div class="auth-card animate-scale-in stagger-1">
                 <h1>Selamat datang!</h1>
                 <p class="auth-subtitle">Masuk untuk melanjutkan ke akun Anda</p>
 
@@ -284,7 +285,7 @@
                 </form>
             </div>
 
-            <p class="auth-footer">
+            <p class="auth-footer animate-fade-in-up stagger-2">
                 Belum punya akun? <a href="{{ url('/register') }}">Daftar sekarang</a>
             </p>
         </div>

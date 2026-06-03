@@ -232,8 +232,8 @@
 @endpush
 
 @section('content')
-    <div class="settings-container">
-        <div class="settings-header">
+    <div class="settings-container animate-scale-in">
+        <div class="settings-header animate-fade-in-up stagger-1">
             <h1 class="settings-title">Pengaturan Akun</h1>
             <p class="settings-desc">Kelola profil, informasi identitas, dan keamanan akun Anda.</p>
         </div>
@@ -267,7 +267,7 @@
         <form action="{{ url('/pengaturan-akun/update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div class="cover-photo-wrapper" id="cover_preview_wrapper">
+            <div class="cover-photo-wrapper animate-fade-in-up stagger-2" id="cover_preview_wrapper">
                 @if(isset(session('user')['cover_photo']) && session('user')['cover_photo'])
                     <img src="{{ asset(session('user')['cover_photo']) }}" alt="Cover" class="cover-photo-preview" id="cover_preview_img">
                 @endif
@@ -281,7 +281,7 @@
                 <input type="file" name="cover_photo" id="cover_input" accept="image/*">
             </div>
 
-            <div class="profile-photo-wrapper">
+            <div class="profile-photo-wrapper animate-fade-in-up stagger-3">
                 <div class="profile-photo-preview" id="photo_preview">
                     @if(isset(session('user')['avatar']) && session('user')['avatar'])
                         <img src="{{ asset(session('user')['avatar']) }}" alt="Avatar">
@@ -293,18 +293,18 @@
                 <input type="file" name="avatar" id="photo_input" accept="image/*">
             </div>
 
-            <div class="form-group">
+            <div class="form-group animate-fade-in-up stagger-4">
                 <label class="form-label" for="name">Nama Lengkap</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{ session('user')['name'] }}" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group animate-fade-in-up stagger-4">
                 <label class="form-label" for="username">Username</label>
                 <input type="text" id="username" name="username" class="form-control" value="{{ session('user')['username'] }}" required>
             </div>
 
             @if(!isset(session('user')['role']) || (session('user')['role'] !== 'admin' && session('user')['role'] !== 'superadmin'))
-            <div style="border-top: 1px dashed var(--border); margin-top: 2rem; padding-top: 1.5rem;">
+            <div class="animate-fade-in-up stagger-5" style="border-top: 1px dashed var(--border); margin-top: 2rem; padding-top: 1.5rem;">
                 <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">Informasi Tambahan</h3>
                 
                 <div class="form-group">
@@ -334,7 +334,7 @@
             </div>
             @endif
 
-            <div class="password-section">
+            <div class="password-section animate-fade-in-up stagger-6">
                 <h3 class="password-section-title">Keamanan Akun</h3>
                 
                 <div class="form-group">
@@ -348,7 +348,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-save">
+            <button type="submit" class="btn-save animate-fade-in-up hover-lift stagger-6">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                     <polyline points="17 21 17 13 7 13 7 21"></polyline>

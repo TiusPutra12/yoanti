@@ -181,7 +181,7 @@
 @endpush
 
 @section('content')
-    <div style="max-width: 600px; margin: 0 auto; padding-top: 2rem; padding-left: 1rem; padding-right: 1rem;">
+    <div class="animate-slide-in-right" style="max-width: 600px; margin: 0 auto; padding-top: 2rem; padding-left: 1rem; padding-right: 1rem;">
         <a href="{{ url('/penyedia/dashboard') }}" class="btn-back">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -191,8 +191,8 @@
         </a>
     </div>
 
-    <div class="form-container">
-        <div class="form-header">
+    <div class="form-container animate-scale-in">
+        <div class="form-header animate-fade-in-up stagger-1">
             <h1 class="form-title">Edit Portofolio</h1>
             <p class="form-desc">Perbarui detail produk atau layanan Anda.</p>
         </div>
@@ -211,22 +211,22 @@
             @csrf
             <input type="hidden" name="id" value="{{ $product['id'] }}">
 
-            <div class="form-group">
+            <div class="form-group animate-fade-in-up stagger-2">
                 <label class="form-label" for="title">Nama Produk / Layanan</label>
                 <input type="text" id="title" name="title" class="form-control" placeholder="Contoh: Desain Website E-commerce" required value="{{ old('title', $product['title'] ?? '') }}">
             </div>
 
-            <div class="form-group">
+            <div class="form-group animate-fade-in-up stagger-3">
                 <label class="form-label" for="description">Deskripsi</label>
                 <textarea id="description" name="description" class="form-control" placeholder="Jelaskan detail layanan atau portofolio produk Anda..." required>{{ old('description', $product['description'] ?? '') }}</textarea>
             </div>
 
-            <div class="form-group">
+            <div class="form-group animate-fade-in-up stagger-4">
                 <label class="form-label" for="price">Harga Produk / Layanan</label>
                 <input type="text" id="price" name="price" class="form-control" placeholder="Contoh: Rp 500.000 atau Hubungi Kami" required value="{{ old('price', $product['price'] ?? '') }}">
             </div>
 
-            <div class="form-group">
+            <div class="form-group animate-fade-in-up stagger-5">
                 <label class="form-label">Gambar Portofolio (Opsional)</label>
                 <div class="file-upload-wrapper" id="dropArea">
                     <input type="file" name="image" id="imageInput" class="file-upload-input" accept="image/*">
@@ -244,7 +244,7 @@
                 <small style="color: var(--text-muted); display: block; margin-top: 0.5rem; font-size: 0.8rem;">Abaikan jika tidak ingin mengubah gambar.</small>
             </div>
 
-            <button type="submit" class="btn-submit">Simpan Perubahan</button>
+            <button type="submit" class="btn-submit animate-fade-in-up stagger-5 hover-lift">Simpan Perubahan</button>
         </form>
     </div>
 @endsection

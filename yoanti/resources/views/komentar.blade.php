@@ -313,7 +313,7 @@
 
 @section('content')
     <div class="comments-page">
-        <div class="page-header">
+        <div class="page-header animate-fade-in-up">
             <span class="badge">Komunitas</span>
             <h1>Testimoni & Diskusi</h1>
             <p>Apa kata mereka yang telah bekerja bersama kami</p>
@@ -321,7 +321,7 @@
 
         <div class="comments-wrap">
             <!-- Write Comment -->
-            <div class="comment-form-card">
+            <div class="comment-form-card animate-scale-in stagger-1">
                 <h2>💬 Tulis Komentar</h2>
                 @if (session()->has('user'))
                     @if (isset(session('user')['role']) && session('user')['role'] === 'admin')
@@ -363,7 +363,7 @@
 
             <!-- Comments List -->
             @forelse($comments ?? [] as $c)
-                <div class="comment-card">
+                <div class="comment-card animate-scale-in hover-lift stagger-{{ $loop->iteration > 5 ? 5 : ($loop->iteration + 1) }}">
                     <div class="comment-header">
                         <div class="avatar {{ isset($c['role']) && $c['role'] === 'admin' ? 'admin-avatar' : '' }}">
                             {{ strtoupper(substr($c['name'], 0, 1)) }}

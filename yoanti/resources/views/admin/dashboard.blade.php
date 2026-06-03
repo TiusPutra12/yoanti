@@ -225,7 +225,7 @@
 
 @section('content')
     <div class="admin-page">
-        <div class="admin-page-header">
+        <div class="admin-page-header animate-fade-in-up">
             <h1>Manajemen Permintaan</h1>
             <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                 @if(count($orders ?? []) > 0)
@@ -242,7 +242,7 @@
             </div>
         </div>
 
-        <div class="admin-card">
+        <div class="admin-card animate-scale-in stagger-1">
             @if(count($orders ?? []) > 0)
                 <div class="table-scroll">
                     <table>
@@ -258,7 +258,7 @@
                         </thead>
                         <tbody>
                             @foreach($orders as $order)
-                                <tr>
+                                <tr class="animate-fade-in-up hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                                     <td data-label="ID">
                                         <div style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">#{{ $order['id'] }}</div>
                                         <div class="client-meta">{{ $order['created_at'] ?? '' }}</div>

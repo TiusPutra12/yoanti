@@ -195,7 +195,7 @@
 @section('content')
     <section class="auth-page">
         <div class="auth-wrapper">
-            <div class="auth-logo-area">
+            <div class="auth-logo-area animate-fade-in-up">
                 <a href="{{ url('/') }}" class="brand">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -204,7 +204,7 @@
                 </a>
             </div>
 
-            <div class="auth-card">
+            <div class="auth-card animate-scale-in stagger-1">
                 <h1>Lupa Password</h1>
                 <p class="auth-subtitle">Masukkan data Anda untuk membuat password baru.</p>
 
@@ -274,7 +274,7 @@
                 </form>
             </div>
 
-            <p class="auth-footer">
+            <p class="auth-footer animate-fade-in-up stagger-2">
                 Ingat password? <a href="{{ url('/login') }}">Kembali ke Login</a>
             </p>
         </div>

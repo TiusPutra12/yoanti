@@ -244,7 +244,7 @@
 @section('content')
     <div class="dashboard-page">
         <div class="dashboard-container">
-            <div class="dashboard-header">
+            <div class="dashboard-header animate-slide-in-right">
                 <div class="dashboard-title-area">
                 <h1>Dashboard Portofolio</h1>
                 <p>Kelola portofolio layanan dan produk yang Anda tawarkan.</p>
@@ -261,7 +261,7 @@
         @if(count($myProducts) > 0)
             <div class="products-grid">
                 @foreach($myProducts as $p)
-                    <div class="product-card">
+                    <div class="product-card animate-scale-in hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                         <div class="product-img-wrapper">
                             <img src="{{ asset($p['image']) }}" alt="{{ $p['title'] }}" class="product-img" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
                             
@@ -312,7 +312,7 @@
                 @endforeach
             </div>
         @else
-            <div class="empty-state">
+            <div class="empty-state animate-fade-in-up">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>

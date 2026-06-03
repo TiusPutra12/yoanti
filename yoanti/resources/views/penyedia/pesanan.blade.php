@@ -206,7 +206,7 @@
 @section('content')
     <div class="orders-page">
         <div class="orders-container">
-            <div class="orders-header">
+            <div class="orders-header animate-slide-in-right">
                 <h1>Pesanan Masuk</h1>
                 <p>Kelola pesanan klien yang tertarik dengan produk portofolio Anda.</p>
             </div>
@@ -226,7 +226,7 @@
         @if(count($myOrders) > 0)
             <div class="orders-grid">
                 @foreach($myOrders as $order)
-                    <div class="order-card">
+                    <div class="order-card animate-fade-in-up hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                         <div class="order-info">
                             <h3>{{ $order['programType'] }}</h3>
                             
@@ -303,7 +303,7 @@
                 @endforeach
             </div>
         @else
-            <div class="empty-state">
+            <div class="empty-state animate-fade-in-up">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>

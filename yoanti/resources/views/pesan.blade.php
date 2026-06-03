@@ -206,7 +206,7 @@
 
 @section('content')
     <div class="order-page">
-        <div class="order-header">
+        <div class="order-header animate-fade-in-up">
             <div class="badge">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2.5">
@@ -219,7 +219,7 @@
             <p>Kami akan menghubungi Anda melalui WhatsApp dalam 1×24 jam</p>
         </div>
 
-        <div class="form-card">
+        <div class="form-card animate-scale-in stagger-1">
             <form id="orderForm" onsubmit="sendToWhatsApp(event)">
                 <p class="form-section-title">Data Diri</p>
                 <div class="form-grid" style="gap: 1rem; margin-bottom: 1rem;">

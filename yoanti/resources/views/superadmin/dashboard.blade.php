@@ -142,7 +142,7 @@
 
 @section('content')
     <div class="sa-page">
-        <div class="sa-page-header">
+        <div class="sa-page-header animate-slide-in-right">
             <p class="sa-welcome">Selamat datang,
                 <strong>{{ session('user')['name'] ?? 'Super Admin' }}</strong>
             </p>
@@ -150,7 +150,7 @@
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card animate-scale-in stagger-1">
                 <div class="stat-icon blue">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -165,7 +165,7 @@
                 </div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card animate-scale-in stagger-2">
                 <div class="stat-icon green">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
@@ -178,7 +178,7 @@
                 </div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card animate-scale-in stagger-3">
                 <div class="stat-icon purple">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -195,9 +195,9 @@
             </div>
         </div>
 
-        <p class="section-label">Navigasi Cepat</p>
+        <p class="section-label animate-fade-in-up stagger-3">Navigasi Cepat</p>
         <div class="quick-links-grid">
-            <a href="{{ url('/superadmin/user') }}" class="quick-link-card">
+            <a href="{{ url('/superadmin/user') }}" class="quick-link-card animate-fade-in-up hover-lift stagger-4">
                 <div class="ql-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
@@ -206,7 +206,7 @@
                     <p>{{ count($users) }} akun terdaftar</p>
                 </div>
             </a>
-            <a href="{{ url('/superadmin/pesanan') }}" class="quick-link-card">
+            <a href="{{ url('/superadmin/pesanan') }}" class="quick-link-card animate-fade-in-up hover-lift stagger-4">
                 <div class="ql-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 </div>
@@ -215,7 +215,7 @@
                     <p>{{ count($orders) }} riwayat pesanan</p>
                 </div>
             </a>
-            <a href="{{ url('/superadmin/komentar') }}" class="quick-link-card">
+            <a href="{{ url('/superadmin/komentar') }}" class="quick-link-card animate-fade-in-up hover-lift stagger-5">
                 <div class="ql-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </div>

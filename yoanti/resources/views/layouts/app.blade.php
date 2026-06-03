@@ -708,6 +708,61 @@
             }
         }
 
+        /* ── GLOBAL ANIMATION UTILITIES ── */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Hover lift effect for cards */
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 768px) {
             :root {
@@ -1314,7 +1369,7 @@
                         <div class="dropdown-header" style="position: relative;">
                             <strong>{{ session('user')['name'] }}</strong>
                             <span>{{ session('user')['role'] ?? 'User' }}</span>
-                            <span style="position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: #EFF6FF; padding: 0.15rem 0.4rem; border-radius: 8px;">v2.0</span>
+                            <span style="position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: #EFF6FF; padding: 0.15rem 0.4rem; border-radius: 8px;">v3.1</span>
                         </div>
                         @if (isset(session('user')['role']) && session('user')['role'] === 'job_provider')
                             <a href="{{ url('/penyedia-jasa/' . session('user')['username']) }}">
@@ -1367,7 +1422,7 @@
                         <div class="dropdown-header" style="position: relative;">
                             <strong>Tamu</strong>
                             <span>Belum masuk</span>
-                            <span style="position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: #EFF6FF; padding: 0.15rem 0.4rem; border-radius: 8px;">v2.0</span>
+                            <span style="position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: #EFF6FF; padding: 0.15rem 0.4rem; border-radius: 8px;">v3.1</span>
                         </div>
                         <a href="{{ url('/login') }}" style="color: var(--primary);">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"

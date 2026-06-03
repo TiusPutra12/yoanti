@@ -248,7 +248,7 @@
 
 @section('content')
     <div class="sa-page">
-        <div class="sa-page-header">
+        <div class="sa-page-header animate-fade-in-up">
             <div>
                 <h1>Moderasi Komentar</h1>
                 <p>Kontrol penuh terhadap testimoni dan diskusi</p>
@@ -265,7 +265,7 @@
             @endif
         </div>
 
-        <div class="sa-card">
+        <div class="sa-card animate-scale-in stagger-1">
             @if (count($comments ?? []) > 0)
                 <div class="table-scroll">
                     <table>
@@ -279,7 +279,7 @@
                         </thead>
                         <tbody>
                             @foreach (array_reverse($comments) as $c)
-                                <tr>
+                                <tr class="animate-fade-in-up hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                                     <td data-label="Penulis">
                                         <strong>{{ $c['name'] }}</strong>
                                         <small style="color: #64748B; display: block;">{{ '@' . $c['username'] }}</small>
@@ -342,7 +342,7 @@
                     </table>
                 </div>
             @else
-                <div class="empty-state">
+                <div class="empty-state animate-fade-in-up">
                     <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />

@@ -898,7 +898,7 @@
             <div class="layout-wrapper">
 
                 <!-- KOLOM KIRI (Profil & Portofolio) -->
-                <div class="main-content">
+                <div class="main-content animate-fade-in-up">
                     <div class="profile-card">
                         <div class="profile-cover" 
                             style="{{ isset($provider['cover_photo']) && $provider['cover_photo'] ? 'background-image: url(' . asset($provider['cover_photo']) . '); background-size: cover; background-position: center;' : '' }}">
@@ -996,7 +996,7 @@
 
                     <div class="product-grid">
                         @forelse($providerProducts as $product)
-                            <div class="product-card">
+                            <div class="product-card animate-scale-in hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                                 <div class="product-img-box">
                                     <span class="badge-type">{{ $product['type'] ?? 'Layanan' }}</span>
                                     <img src="{{ asset($product['image']) }}" alt="{{ $product['title'] }}" class="product-img"
@@ -1034,7 +1034,7 @@
                 </div>
 
                 <!-- KOLOM KANAN (Chat Panel Fixed/Sticky) -->
-                <div class="chat-panel" id="ulasan">
+                <div class="chat-panel animate-slide-in-right" id="ulasan">
 
                     <!-- Header Chat -->
                     <div class="chat-header">

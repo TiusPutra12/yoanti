@@ -284,14 +284,14 @@
 
 @section('content')
     <div class="provider-page">
-        <div class="page-header">
+        <div class="page-header animate-slide-in-right">
             <h1>Direktori Penyedia Jasa</h1>
             <p>Temukan profesional terbaik yang siap membantu mewujudkan kebutuhan project digital Anda.</p>
         </div>
 
         <div class="provider-grid">
             @forelse($providers as $provider)
-                <div class="provider-card">
+                <div class="provider-card animate-scale-in hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                     <div class="provider-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
                         @if(isset($provider['avatar']) && $provider['avatar'])
                             <img src="{{ asset($provider['avatar']) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
@@ -356,7 +356,7 @@
                     </div>
                 </div>
             @empty
-                <div class="empty-state">
+                <div class="empty-state animate-fade-in-up">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">

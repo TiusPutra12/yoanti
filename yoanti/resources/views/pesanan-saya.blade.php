@@ -255,7 +255,7 @@
 
 @section('content')
     <div class="pesanan-page">
-        <div class="page-header">
+        <div class="page-header animate-slide-in-right">
             <h1>Pesanan Saya</h1>
             @if (count($myOrders ?? []) > 0)
                 <span class="total-badge">{{ count($myOrders) }} Pesanan</span>
@@ -263,7 +263,7 @@
         </div>
 
         <div class="orders-container">
-            <div class="table-wrapper">
+            <div class="table-wrapper animate-scale-in">
                 @if (count($myOrders ?? []) > 0)
                     <table>
                         <thead>
@@ -277,7 +277,7 @@
                         </thead>
                         <tbody>
                             @foreach ($myOrders as $order)
-                                <tr>
+                                <tr class="animate-fade-in-up hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                                     <td data-label="ID" class="order-id">#{{ $order['id'] }}</td>
                                     <td data-label="Layanan"><strong>{{ $order['programType'] }}</strong></td>
                                     <td data-label="Instansi" style="color: var(--text-muted);">{{ $order['company'] ?? '-' }}</td>
@@ -300,7 +300,7 @@
                         </tbody>
                     </table>
                 @else
-                    <div class="empty-state">
+                    <div class="empty-state animate-fade-in-up">
                         <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />

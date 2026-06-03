@@ -111,7 +111,7 @@
 
 @section('content')
     <div class="legal-page">
-        <div class="legal-container">
+        <div class="legal-container animate-fade-in-up">
             <span class="legal-badge">Privasi</span>
             <h1>Kebijakan Privasi</h1>
             <p class="legal-meta">Terakhir diperbarui: {{ date('d F Y') }}</p>

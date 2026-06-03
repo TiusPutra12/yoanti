@@ -401,7 +401,7 @@
 @endpush
 
 @section('content')
-    <div class="page-header">
+    <div class="page-header animate-slide-in-right">
         <h1 class="page-title">Katalog Produk</h1>
         <p class="page-desc">Jelajahi karya dan layanan digital dari penyedia jasa profesional kami.</p>
     </div>
@@ -410,7 +410,7 @@
         @if (count($products) > 0)
             <div class="products-grid">
                 @foreach ($products as $product)
-                    <div class="product-card">
+                    <div class="product-card animate-scale-in hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                         <div class="product-image-wrapper">
                             <img src="{{ asset($product['image']) }}" alt="{{ $product['title'] }}" class="product-image"
                                 loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
@@ -483,7 +483,7 @@
                 @endforeach
             </div>
         @else
-            <div class="empty-state">
+            <div class="empty-state animate-fade-in-up">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                     stroke-linejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>

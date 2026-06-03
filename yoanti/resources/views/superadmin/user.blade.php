@@ -195,7 +195,7 @@
 
 @section('content')
     <div class="sa-page">
-        <div class="sa-page-header">
+        <div class="sa-page-header animate-fade-in-up">
             <div>
                 <h1>Manajemen Pengguna</h1>
                 <p>Kelola data akun yang terdaftar di platform</p>
@@ -205,7 +205,7 @@
             @endif
         </div>
 
-        <div class="sa-card">
+        <div class="sa-card animate-scale-in stagger-1">
             @if (count($users ?? []) > 0)
                 <div class="table-scroll">
                     <table>
@@ -218,7 +218,7 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $u)
-                                <tr>
+                                <tr class="animate-fade-in-up hover-lift stagger-{{ $loop->iteration > 5 ? 5 : $loop->iteration }}">
                                     <td data-label="Pengguna">
                                         <div class="user-cell">
                                             <div class="user-avatar">{{ strtoupper(substr($u['name'] ?? $u['username'], 0, 1)) }}</div>
@@ -257,7 +257,7 @@
                     </table>
                 </div>
             @else
-                <div class="empty-state">
+                <div class="empty-state animate-fade-in-up">
                     <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
