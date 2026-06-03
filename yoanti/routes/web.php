@@ -216,6 +216,9 @@ Route::get('/pengaturan-akun', function () {
 });
 
 // Proses Update Pengaturan Akun
+Route::get('/pengaturan-akun/update', function () {
+    return redirect('/pengaturan-akun');
+});
 Route::post('/pengaturan-akun/update', function (Request $request) {
     if (!session()->has('user')) return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
     
