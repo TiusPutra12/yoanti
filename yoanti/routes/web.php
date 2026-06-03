@@ -602,9 +602,12 @@ Route::post('/login', function (Request $request) {
 
     $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
     $users = json_decode($usersContent, true);
+    $userFound = false;
+    
     if(is_array($users)) {
         foreach ($users as $user) {
             if ($user['username'] === $request->username) {
+                $userFound = true;
                 if (Hash::check($request->password, $user['password'])) {
                     if(!isset($user['role'])) $user['role'] = 'user'; // fallback for existing
                     session(['user' => $user]);
@@ -621,6 +624,10 @@ Route::post('/login', function (Request $request) {
                 }
             }
         }
+    }
+
+    if (!$userFound) {
+        return back()->with('error', 'Username tidak ditemukan.')->withInput();
     }
 
     return back()->with('error', 'Username atau password salah.');

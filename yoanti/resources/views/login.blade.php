@@ -205,11 +205,7 @@
 @endpush
 
 @section('content')
-    <section class="auth-page" style="position: relative;">
-        <!-- Version Badge -->
-        <div style="position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.85rem; font-weight: 700; color: var(--primary); background: #fff; padding: 0.35rem 0.85rem; border-radius: 99px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); letter-spacing: -0.01em;">
-            v2.0
-        </div>
+    <section class="auth-page">
 
         <div class="auth-wrapper">
             <div class="auth-logo-area">

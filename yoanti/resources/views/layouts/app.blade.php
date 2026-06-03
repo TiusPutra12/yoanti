@@ -1308,9 +1308,10 @@
                 </button>
                 <div id="userMenuDropdown" class="dropdown-content">
                     @if (session()->has('user'))
-                        <div class="dropdown-header">
+                        <div class="dropdown-header" style="position: relative;">
                             <strong>{{ session('user')['name'] }}</strong>
                             <span>{{ session('user')['role'] ?? 'User' }}</span>
+                            <span style="position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: #EFF6FF; padding: 0.15rem 0.4rem; border-radius: 8px;">v2.0</span>
                         </div>
                         @if (isset(session('user')['role']) && session('user')['role'] === 'job_provider')
                             <a href="{{ url('/penyedia-jasa/' . session('user')['username']) }}">
@@ -1360,9 +1361,10 @@
                             Keluar
                         </a>
                     @else
-                        <div class="dropdown-header">
+                        <div class="dropdown-header" style="position: relative;">
                             <strong>Tamu</strong>
                             <span>Belum masuk</span>
+                            <span style="position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: #EFF6FF; padding: 0.15rem 0.4rem; border-radius: 8px;">v2.0</span>
                         </div>
                         <a href="{{ url('/login') }}" style="color: var(--primary);">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
