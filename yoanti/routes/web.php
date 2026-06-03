@@ -604,22 +604,64 @@ Route::post('/login', function (Request $request) {
     $users = json_decode($usersContent, true);
     if(is_array($users)) {
         foreach ($users as $user) {
-            if ($user['username'] === $request->username && Hash::check($request->password, $user['password'])) {
-                if(!isset($user['role'])) $user['role'] = 'user'; // fallback for existing
-                session(['user' => $user]);
-                
-                if ($user['role'] === 'superadmin') {
-                    return redirect('/superadmin/dashboard')->with('success', 'Selamat datang, ' . $user['name'] . '!');
-                } else if ($user['role'] === 'job_provider') {
-                    return redirect('/penyedia/dashboard')->with('success', 'Selamat datang, ' . $user['name'] . '!');
-                }
+            if ($user['username'] === $request->username) {
+                if (Hash::check($request->password, $user['password'])) {
+                    if(!isset($user['role'])) $user['role'] = 'user'; // fallback for existing
+                    session(['user' => $user]);
+                    
+                    if ($user['role'] === 'superadmin') {
+                        return redirect('/superadmin/dashboard')->with('success', 'Selamat datang, ' . $user['name'] . '!');
+                    } else if ($user['role'] === 'job_provider') {
+                        return redirect('/penyedia/dashboard')->with('success', 'Selamat datang, ' . $user['name'] . '!');
+                    }
 
-                return redirect('/')->with('success', 'Selamat datang, ' . $user['name'] . '!');
+                    return redirect('/')->with('success', 'Selamat datang, ' . $user['name'] . '!');
+                } else {
+                    return back()->with('error', 'Password salah.')->with('wrong_password', true)->withInput();
+                }
             }
         }
     }
 
     return back()->with('error', 'Username atau password salah.');
+});
+
+// Lupa Password Routes
+Route::get('/lupa-password', function () {
+    if (session()->has('user')) return redirect('/');
+    return view('lupa-password');
+});
+
+Route::post('/lupa-password', function (Request $request) {
+    $request->validate([
+        'username' => 'required',
+        'name' => 'required',
+        'phone_number' => 'required',
+        'new_password' => 'required|min:4'
+    ]);
+
+    $usersContent = Storage::exists('users.json') ? Storage::get('users.json') : '[]';
+    $users = json_decode($usersContent, true);
+    if (!is_array($users)) $users = [];
+
+    $updated = false;
+    foreach ($users as &$user) {
+        if ($user['username'] === $request->username && $user['name'] === $request->name) {
+            $userPhone = isset($user['phone_number']) ? $user['phone_number'] : '';
+            if ($userPhone === $request->phone_number) {
+                $user['password'] = Hash::make($request->new_password);
+                $updated = true;
+                break;
+            }
+        }
+    }
+
+    if ($updated) {
+        Storage::put('users.json', json_encode($users, JSON_PRETTY_PRINT));
+        return redirect('/login')->with('success', 'Password berhasil diubah. Silakan login.');
+    }
+
+    return back()->with('error', 'Data tidak cocok. Pastikan Username, Nama, dan Nomor Telepon benar.');
 });
 
 // Logika Auth: GET & POST Register
