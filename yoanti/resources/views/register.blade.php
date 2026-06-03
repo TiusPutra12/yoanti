@@ -6,10 +6,12 @@
         .auth-page {
             min-height: calc(100dvh - var(--nav-height));
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
-            padding: clamp(1.5rem, 4vw, 2.5rem) 1rem;
-            background: linear-gradient(160deg, #EFF6FF 0%, #F8FAFC 100%);
+            padding: clamp(1.5rem, 5vw, 3rem) 1rem;
+            background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.1), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.1), transparent 40%),
+                        var(--bg);
         }
 
         .auth-wrapper {
@@ -38,11 +40,13 @@
         }
 
         .auth-card {
-            background: #fff;
-            padding: clamp(1.5rem, 5vw, 2.25rem);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: clamp(2rem, 5vw, 3rem);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid rgba(255,255,255,0.6);
         }
 
         /* Step Indicator */
@@ -167,12 +171,12 @@
 
         .form-control {
             width: 100%;
-            min-height: 48px;
-            padding: 0.7rem 1rem;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            background: #F8FAFC;
+            min-height: 52px;
+            padding: 0 1rem 0 2.75rem;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 14px;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.7);
             color: var(--text-main);
             transition: var(--transition);
             font-family: 'Inter', sans-serif;
@@ -182,7 +186,7 @@
             outline: none;
             border-color: var(--primary);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
         }
 
         /* Role Cards */

@@ -11,25 +11,25 @@
         rel="stylesheet">
     <style>
         :root {
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
-            --primary-light: rgba(37, 99, 235, 0.1);
-            --bg: #F8FAFC;
-            --text-main: #0F172A;
-            --text-muted: #64748B;
+            --primary: #4F46E5; /* Indigo 600 */
+            --primary-hover: #3730A3; /* Indigo 800 */
+            --primary-light: rgba(79, 70, 229, 0.1);
+            --bg: #FAFAFA;
+            --text-main: #111827; /* Gray 900 */
+            --text-muted: #6B7280; /* Gray 500 */
             --card-bg: #FFFFFF;
-            --border: #E2E8F0;
-            --nav-height: 68px;
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --border: #E5E7EB; /* Gray 200 */
+            --nav-height: 72px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
             /* Global Validation Variables */
-            --error: #DC2626;
+            --error: #EF4444;
             --error-bg: #FEF2F2;
         }
 
@@ -47,6 +47,8 @@
 
         body {
             background-color: var(--bg);
+            background-image: radial-gradient(circle at top right, rgba(79, 70, 229, 0.03), transparent 30%), radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.03), transparent 30%);
+            background-attachment: fixed;
             color: var(--text-main);
             line-height: 1.6;
             scroll-behavior: smooth;
@@ -56,7 +58,7 @@
 
         /* ── GLOBAL BUTTON STYLES ── */
         .btn-primary {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
             color: white;
             border: none;
             cursor: pointer;
@@ -66,13 +68,13 @@
             justify-content: center;
             transition: var(--transition);
             font-weight: 600;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.02em;
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
         }
 
         .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
         }
 
         .btn-primary:active {
@@ -86,10 +88,11 @@
             align-items: center;
             padding: 0 clamp(1rem, 5%, 2.5rem);
             height: var(--nav-height);
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 1px 0 rgba(226, 232, 240, 0.8), 0 4px 20px rgba(0, 0, 0, 0.04);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -592,10 +595,10 @@
 
         /* ── FOOTER ── */
         footer {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            color: #94A3B8;
-            padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 5%, 2.5rem);
-            border-top: 1px solid #1E293B;
+            background: #111827; /* Dark Gray 900 */
+            color: #9CA3AF; /* Gray 400 */
+            padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5%, 2.5rem);
+            border-top: 1px solid #1F2937; /* Gray 800 */
         }
 
         .footer-inner {

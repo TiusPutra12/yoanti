@@ -9,10 +9,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: clamp(4rem, 12vh, 7rem) clamp(1rem, 5%, 2rem) clamp(3rem, 8vh, 5rem);
-            background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.8) 100%), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
-            background-size: cover;
-            background-position: center;
+            padding: clamp(6rem, 15vh, 10rem) clamp(1rem, 5%, 2rem) clamp(4rem, 10vh, 7rem);
+            background: radial-gradient(circle at 50% 0%, rgba(79, 70, 229, 0.08) 0%, transparent 60%), #FAFAFA;
             position: relative;
             overflow: hidden;
         }
@@ -20,25 +18,20 @@
         .hero::before {
             content: '';
             position: absolute;
-            width: clamp(200px, 40vw, 500px);
-            height: clamp(200px, 40vw, 500px);
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
-            top: -100px;
-            right: -100px;
-            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: linear-gradient(rgba(79, 70, 229, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(79, 70, 229, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
             pointer-events: none;
+            z-index: 0;
         }
 
-        .hero::after {
-            content: '';
-            position: absolute;
-            width: clamp(150px, 30vw, 350px);
-            height: clamp(150px, 30vw, 350px);
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-            bottom: -50px;
-            left: -50px;
-            border-radius: 50%;
-            pointer-events: none;
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
         }
 
         .hero-badge {
@@ -58,30 +51,28 @@
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
             font-weight: 900;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             color: var(--text-main);
-            max-width: 820px;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em;
             line-height: 1.1;
-            z-index: 1;
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, #2563EB, #6366F1);
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .hero p {
-            font-size: clamp(0.95rem, 2vw, 1.15rem);
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
             color: var(--text-muted);
-            max-width: 560px;
-            margin-bottom: 2.25rem;
-            line-height: 1.7;
-            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+            font-weight: 400;
         }
 
         .hero-cta {
@@ -153,61 +144,66 @@
 
         /* ── SERVICES ── */
         .services {
-            padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 5%, 2rem);
-            background: #fff;
+            padding: clamp(5rem, 10vw, 7rem) clamp(1rem, 5%, 2rem);
+            background: #FAFAFA;
+            position: relative;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: clamp(3rem, 6vw, 4.5rem);
         }
 
         .section-badge {
             display: inline-block;
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 0.3rem 0.85rem;
+            background: rgba(79, 70, 229, 0.1);
+            color: #4F46E5;
+            padding: 0.4rem 1rem;
             border-radius: 999px;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .section-title {
-            font-size: clamp(1.6rem, 4vw, 2.25rem);
+            font-size: clamp(2rem, 5vw, 2.75rem);
             font-weight: 800;
             color: var(--text-main);
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
             line-height: 1.2;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .section-subtitle {
             color: var(--text-muted);
-            font-size: clamp(0.875rem, 2vw, 1rem);
-            max-width: 520px;
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            max-width: 600px;
             margin: 0 auto;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-            gap: 1.5rem;
-            max-width: 1100px;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+            gap: 2rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .service-card {
             background: #fff;
-            padding: clamp(1.5rem, 4vw, 2.25rem);
-            border-radius: 20px;
-            border: 1.5px solid var(--border);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: clamp(2rem, 5vw, 3rem);
+            border-radius: 24px;
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .service-card::before {
@@ -216,16 +212,16 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), #6366F1);
+            height: 4px;
+            background: linear-gradient(90deg, #4F46E5, #7C3AED);
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s;
         }
 
         .service-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
-            border-color: rgba(37, 99, 235, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.08);
+            border-color: rgba(79, 70, 229, 0.1);
         }
 
         .service-card:hover::before {
@@ -233,36 +229,45 @@
         }
 
         .icon-wrapper {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            background: var(--primary-light);
-            color: var(--primary);
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: rgba(79, 70, 229, 0.08);
+            color: #4F46E5;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 1.25rem;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s;
+        }
+
+        .service-card:hover .icon-wrapper {
+            background: #4F46E5;
+            color: #fff;
+            transform: scale(1.05) rotate(-5deg);
         }
 
         .service-card h3 {
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             color: var(--text-main);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
         .service-card p {
             color: var(--text-muted);
-            line-height: 1.65;
-            font-size: 0.9rem;
+            line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         /* ── STATS BAR ── */
         .stats-bar {
-            background: linear-gradient(135deg, #1E40AF, #2563EB);
-            padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 5%, 2rem);
+            background: linear-gradient(135deg, #111827, #1F2937);
+            padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 5%, 2rem);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .stats-grid {
@@ -318,40 +323,42 @@
 
 @section('content')
     <section class="hero">
-        <h1>Wujudkan <span>Website & Aplikasi Impian</span> Anda</h1>
-        <p>Pengembangan perangkat lunak profesional dengan desain modern dan performa tinggi untuk bisnis Anda.</p>
+        <div class="hero-content">
+            <h1>Wujudkan <span>Website & Aplikasi Impian</span> Anda</h1>
+            <p>Pengembangan perangkat lunak kelas enterprise dengan desain premium dan performa tanpa kompromi untuk bisnis modern Anda.</p>
 
-        @if (!session()->has('user') || (isset(session('user')['role']) && session('user')['role'] !== 'admin'))
-            <div class="hero-cta">
-                <a href="{{ url('/pesan') }}" class="btn-primary btn-cta">
-                    {{ session()->has('user') ? 'Pesan Sekarang' : 'Mulai Sekarang' }}
-                </a>
-                <a href="{{ url('/komentar') }}" class="btn-outline">Lihat Testimoni</a>
+            @if (!session()->has('user') || (isset(session('user')['role']) && session('user')['role'] !== 'admin'))
+                <div class="hero-cta">
+                    <a href="{{ url('/pesan') }}" class="btn-primary btn-cta">
+                        {{ session()->has('user') ? 'Pesan Sekarang' : 'Mulai Transformasi' }}
+                    </a>
+                    <a href="{{ url('/komentar') }}" class="btn-outline">Lihat Portfolio</a>
+                </div>
+            @endif
+
+            <div class="hero-trust">
+                <span class="trust-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Harga Transparan
+                </span>
+                <span class="trust-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Dukungan 24/7
+                </span>
+                <span class="trust-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Kualitas Premium
+                </span>
             </div>
-        @endif
-
-        <div class="hero-trust">
-            <span class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Harga Transparan
-            </span>
-            <span class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Dukungan 24/7
-            </span>
-            <span class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Pengiriman Tepat Waktu
-            </span>
         </div>
     </section>
 
@@ -386,19 +393,25 @@
 
         <div class="services-grid">
             <div class="service-card">
-                <h3 style="text-align: center">Pembuatan Website</h3>
-                <p style="text-align: center">Dari landing page hingga e-commerce kompleks — responsif, cepat, dan
-                    SEO-ready.</p>
+                <div class="icon-wrapper">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                </div>
+                <h3>Pembuatan Website</h3>
+                <p>Dari landing page hingga e-commerce kompleks — desain responsif, cepat, interaktif, dan SEO-ready.</p>
             </div>
             <div class="service-card">
-                <h3 style="text-align: center">Aplikasi Android</h3>
-                <p style="text-align: center">Aplikasi mobile interaktif dan user-friendly untuk memperluas jangkauan bisnis
-                    Anda.</p>
+                <div class="icon-wrapper">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                </div>
+                <h3>Aplikasi Android</h3>
+                <p>Aplikasi mobile native dan cross-platform interaktif untuk memperluas jangkauan bisnis Anda tanpa batas.</p>
             </div>
             <div class="service-card">
-                <h3 style="text-align: center">UI/UX Professional</h3>
-                <p style="text-align: center">Desain visual yang indah sekaligus intuitif untuk pengalaman pengguna yang
-                    luar biasa.</p>
+                <div class="icon-wrapper">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                </div>
+                <h3>UI/UX Professional</h3>
+                <p>Desain visual yang indah sekaligus intuitif untuk memastikan pengalaman pengguna yang luar biasa.</p>
             </div>
         </div>
     </section>
